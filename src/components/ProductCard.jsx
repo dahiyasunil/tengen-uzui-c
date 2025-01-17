@@ -6,32 +6,44 @@ const ProductCard = ({ product }) => {
     return product.images.find((img) => img.isPrimary);
   };
 
-  const showPrice = () => {
-    const price = product.discount?.percentage
-      ? Math.round(
-          product.price.amount -
-            (product.price.amount * product.discount.percentage) / 100,
-        )
-      : product.price.amount;
+  const isOnDiscount = () => {
+    if (product.discount?.startDate) {
+      if (
+        Date.now() >= Date.parse(product.discount.startDate) &&
+        Date.now() <= Date.parse(product.discount.endDate)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
 
+  const getDiscountedPrice = () => {
+    return Math.round(
+      product.price.amount -
+        (product.price.amount * product.discount.percentage) / 100,
+    );
+  };
+
+  const showPrice = () => {
     return (
       <p>
         <small>
-          {product.discount?.percentage ? (
+          {isOnDiscount() ? (
             <span className="font-semibold">
-              &#8377;{price}{" "}
-              <span className="text-grey-100 font-normal line-through">
+              &#8377;{getDiscountedPrice()}{" "}
+              <span className="font-normal text-grey-100 line-through">
                 &#8377;{product.price.amount}
               </span>
               <span>
-                <small className="text-beige-700 font-extralight">
+                <small className="font-extralight text-beige-700">
                   {" "}
                   ({product.discount.percentage}% off)
                 </small>
               </span>
             </span>
           ) : (
-            <span className="font-semibold">&#8377;{price}</span>
+            <span className="font-semibold">&#8377;{product.price.amount}</span>
           )}
         </small>
       </p>
@@ -41,13 +53,13 @@ const ProductCard = ({ product }) => {
   const wishlistHandler = () => {};
 
   return (
-    <div className="hover:shadow-beige-100 mb-10 flex justify-center rounded p-3 transition duration-300 hover:shadow-lg">
+    <div className="mb-10 flex justify-center rounded p-3 transition duration-300 hover:shadow-lg hover:shadow-beige-100">
       <Link className="relative">
         <button
           onClick={wishlistHandler}
           className="absolute right-2 top-1 rounded-full"
         >
-          <HeartIcon className="text-beige-100/70 hover:text-beige-300 m-0.5 size-8 transition duration-200 hover:animate-pulse" />
+          <HeartIcon className="m-0.5 size-8 text-beige-100/70 transition duration-200 hover:animate-pulse hover:text-beige-300" />
         </button>
         <div className="grid"></div>
         <div>
@@ -60,7 +72,7 @@ const ProductCard = ({ product }) => {
           </div>
           <div className="px-4 py-2 text-center">
             <p className="py-3">
-              <small className="text-beige-700 text-base font-semibold">
+              <small className="text-base font-semibold text-beige-700">
                 {product.brand}
               </small>
             </p>
@@ -70,7 +82,7 @@ const ProductCard = ({ product }) => {
             {showPrice()}
           </div>
           <div className="flex">
-            <button className="bg-grey-300 hover:bg-grey-500 mx-auto w-11/12 justify-center rounded-md py-1 text-white transition">
+            <button className="mx-auto w-11/12 justify-center rounded-md bg-grey-300 py-1 text-white transition hover:bg-grey-500">
               <small>Add to cart</small>
             </button>
           </div>
