@@ -20,8 +20,10 @@ export default {
     },
     container: {
       center: true,
+      padding: {
+        DEFAULT: "1rem",
+      },
     },
-    html: {},
   },
   plugins: [],
 };

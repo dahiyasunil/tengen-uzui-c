@@ -39,7 +39,7 @@ const Header = () => {
               />
               <MagnifyingGlassIcon className="w-5 text-grey-100" />
             </div>
-            <div className="hidden md:flex md:space-x-5">
+            <div className="hidden pt-1 md:flex md:space-x-5">
               <div className="flex flex-col">
                 <NavLink onClick={loginHandler}>
                   <UserCircleIcon className="size-5 justify-self-center text-grey-300 transition duration-200 hover:text-grey-700" />

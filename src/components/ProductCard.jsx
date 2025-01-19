@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { HeartIcon } from "@heroicons/react/24/outline";
+import { isOnDiscount, getFinalPrice } from "../utils/getPrice";
 import Modal from "./Modal";
 import Login from "./Login";
 
@@ -11,32 +12,13 @@ const ProductCard = ({ product }) => {
     return product.images.find((img) => img.isPrimary);
   };
 
-  const isOnDiscount = () => {
-    if (product.discount?.startDate) {
-      if (
-        Date.now() >= Date.parse(product.discount.startDate) &&
-        Date.now() <= Date.parse(product.discount.endDate)
-      ) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  const getDiscountedPrice = () => {
-    return Math.round(
-      product.price.amount -
-        (product.price.amount * product.discount.percentage) / 100,
-    );
-  };
-
   const showPrice = () => {
     return (
       <p>
         <small>
-          {isOnDiscount() ? (
+          {isOnDiscount(product) ? (
             <span className="font-semibold">
-              &#8377;{getDiscountedPrice()}{" "}
+              &#8377;{getFinalPrice(product)}{" "}
               <span className="font-normal text-grey-100 line-through">
                 &#8377;{product.price.amount}
               </span>
@@ -62,7 +44,7 @@ const ProductCard = ({ product }) => {
   return (
     <div>
       <div className="mb-10 flex justify-center rounded p-3 transition duration-300 hover:shadow-lg hover:shadow-beige-100">
-        <Link className="relative">
+        <Link className="relative" to={`/productDetails/${product._id}`}>
           <button
             onClick={wishlistHandler}
             className="absolute right-2 top-1 rounded-full outline-none"

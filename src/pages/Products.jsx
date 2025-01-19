@@ -12,7 +12,7 @@ const Products = () => {
   }, []);
 
   return (
-    <div className="container py-10 sm:mx-auto">
+    <div className="container py-10">
       <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {products.map((product) => (
           <ProductCard product={product} key={product._id} />
