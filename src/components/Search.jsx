@@ -16,10 +16,6 @@ const Search = () => {
     }
   };
 
-  // useEffect(() => {
-  //   return dispatch(fetchProducts());
-  // }, []);
-
   return (
     <div className="flex justify-center rounded bg-white py-1 ps-2 md:mt-1 md:w-64 lg:w-96">
       <input
