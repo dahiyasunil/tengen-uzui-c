@@ -1,5 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import { useState } from "react";
+import Search from "./Search";
 import Modal from "./Modal";
 import Login from "./Login";
 
@@ -7,7 +8,6 @@ import {
   UserCircleIcon,
   HeartIcon,
   ShoppingBagIcon,
-  MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 
 const Header = () => {
@@ -31,14 +31,7 @@ const Header = () => {
             </Link>
           </div>
           <div className="flex flex-col md:flex-row md:space-x-10">
-            <div className="flex justify-center rounded bg-white py-1 ps-2 md:mt-1 md:w-64 lg:w-96">
-              <input
-                type="text"
-                placeholder="Search"
-                className="w-11/12 outline-none placeholder:text-sm"
-              />
-              <MagnifyingGlassIcon className="w-5 text-grey-100" />
-            </div>
+            <Search />
             <div className="hidden pt-1 md:flex md:space-x-5">
               <div className="flex flex-col">
                 <NavLink onClick={loginHandler}>

@@ -37,7 +37,9 @@ const ProductCard = ({ product }) => {
     );
   };
 
-  const wishlistHandler = () => {
+  const wishlistHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     setModal(true);
   };
 

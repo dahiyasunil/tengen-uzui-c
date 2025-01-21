@@ -5,10 +5,12 @@ const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async () => {
-    const response = await axios.get(`${serverUrl}/api/products`);
+  async (keywords) => {
+    const response = await axios.get(`${serverUrl}/api/products/`, {
+      params: { search: keywords },
+    });
     return response.data;
-  }
+  },
 );
 
 const initialState = {

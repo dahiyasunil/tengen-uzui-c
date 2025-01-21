@@ -10,6 +10,7 @@ const Products = () => {
 
   useEffect(() => {
     dispatch(fetchProducts());
+    console.log("loading products");
   }, []);
 
   return (
