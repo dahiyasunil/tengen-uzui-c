@@ -6,7 +6,32 @@ import FilterAside from "../components/FilterAside";
 
 const Products = () => {
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.product);
+  const { products, isFilter, filters } = useSelector((state) => state.product);
+
+  let productList = products;
+  if (isFilter) {
+    const { category, price, rating, sortBy } = filters;
+
+    if (category && category.length > 0) {
+      productList = [];
+      category.forEach((c) => {
+        productList = [
+          ...productList,
+          ...products.filter((product) => product.targetAudience.includes(c)),
+        ];
+      });
+    }
+
+    if (price) {
+      console.log("applying price filter");
+      console.log(productList);
+      productList = productList.filter(
+        (product) => product.price.amount <= price,
+      );
+    }
+  } else {
+    productList = products;
+  }
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -20,7 +45,7 @@ const Products = () => {
         </aside>
         <section className="col-span-9">
           <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((product) => (
+            {productList.map((product) => (
               <ProductCard product={product} key={product._id} />
             ))}
           </div>
