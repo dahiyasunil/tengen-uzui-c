@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateFilters } from "../../features/productSlice";
 import { StarIcon } from "@heroicons/react/24/solid";
 
 const RatingFilter = () => {
-  const [rating, setRating] = useState(null);
-
-  const ratingHandler = (e) => {};
+  const dispatch = useDispatch();
+  const ratingHandler = (e) => {
+    dispatch(updateFilters({ rating: e.target.value }));
+  };
 
   return (
     <div className="my-8">
@@ -17,6 +19,7 @@ const RatingFilter = () => {
             name="rating"
             value={4}
             className="mr-1 accent-beige-500"
+            onChange={ratingHandler}
           />
           <span className="flex items-center space-x-1">
             <span>4</span>
@@ -35,6 +38,7 @@ const RatingFilter = () => {
             name="rating"
             value={3}
             className="mr-1 accent-beige-500"
+            onChange={ratingHandler}
           />
           <span className="flex items-center space-x-1">
             <span>3</span>
@@ -53,6 +57,7 @@ const RatingFilter = () => {
             name="rating"
             value={2}
             className="mr-1 accent-beige-500"
+            onChange={ratingHandler}
           />
           <span className="flex items-center space-x-1">
             <span>2</span>
@@ -71,6 +76,7 @@ const RatingFilter = () => {
             name="rating"
             value={1}
             className="mr-1 accent-beige-500"
+            onChange={ratingHandler}
           />
           <span className="flex items-center space-x-1">
             <span>1</span>

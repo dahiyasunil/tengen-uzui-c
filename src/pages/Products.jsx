@@ -23,10 +23,14 @@ const Products = () => {
     }
 
     if (price) {
-      console.log("applying price filter");
-      console.log(productList);
       productList = productList.filter(
         (product) => product.price.amount <= price,
+      );
+    }
+
+    if (rating) {
+      productList = productList.filter(
+        (product) => product.rating >= parseFloat(rating),
       );
     }
   } else {
