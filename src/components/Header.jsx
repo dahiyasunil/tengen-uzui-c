@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import { useState } from "react";
-import Search from "./Search";
+import Search from "./filters/Search";
 import Modal from "./Modal";
 import Login from "./Login";
 
