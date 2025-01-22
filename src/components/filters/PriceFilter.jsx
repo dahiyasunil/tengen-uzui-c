@@ -19,14 +19,14 @@ const PriceFilter = () => {
     <div className="my-8">
       <p className="mb-2 text-base font-semibold">Price</p>
       <div>
-        <div className="flex w-56 justify-between text-xs">
+        <div className="flex justify-between text-xs">
           <span>100</span>
           <span>5000</span>
         </div>
         <input
           type="range"
           id=""
-          className="w-56 accent-beige-500"
+          className="w-full accent-beige-500"
           min={MIN_PRICE}
           max={MAX_PRICE}
           step="100"

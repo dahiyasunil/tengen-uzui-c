@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { fetchProducts } from "../features/productSlice";
 import ProductCard from "../components/ProductCard";
 import FilterAside from "../components/FilterAside";
+import { getFinalPrice } from "../utils/getPrice";
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -32,6 +33,20 @@ const Products = () => {
       productList = productList.filter(
         (product) => product.rating >= parseFloat(rating),
       );
+    }
+
+    if (sortBy.price) {
+      console.log(sortBy.price);
+
+      if (sortBy.price === "lowToHigh") {
+        productList = productList.toSorted(
+          (a, b) => getFinalPrice(a) - getFinalPrice(b),
+        );
+      } else {
+        productList = productList.toSorted(
+          (a, b) => getFinalPrice(b) - getFinalPrice(a),
+        );
+      }
     }
   } else {
     productList = products;
