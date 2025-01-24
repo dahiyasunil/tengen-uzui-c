@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { HeartIcon } from "@heroicons/react/24/outline";
+import { StarIcon } from "@heroicons/react/24/solid";
 import { isOnDiscount, getFinalPrice } from "../utils/getPrice";
 import Modal from "./Modal";
 import Login from "./Login";
@@ -46,20 +47,26 @@ const ProductCard = ({ product }) => {
   return (
     <div>
       <div className="mb-10 flex justify-center rounded p-3 transition duration-300 hover:shadow-lg hover:shadow-beige-100">
-        <Link className="relative" to={`/productDetails/${product._id}`}>
-          <button
-            onClick={wishlistHandler}
-            className="absolute right-2 top-1 rounded-full outline-none"
-          >
-            <HeartIcon className="m-0.5 size-8 text-beige-100/70 transition duration-200 hover:animate-pulse hover:text-beige-300" />
-          </button>
+        <Link to={`/productDetails/${product._id}`}>
           <div>
-            <div>
+            <div className="relative">
               <img
                 src={getPrimaryImage().url}
                 alt={product.name}
                 className="w-72 rounded-md"
               />
+              <button
+                onClick={wishlistHandler}
+                className="absolute right-2 top-1 rounded-full outline-none"
+              >
+                <HeartIcon className="m-0.5 size-8 text-beige-100/70 transition duration-200 hover:animate-pulse hover:text-beige-300" />
+              </button>
+              {product.rating && (
+                <div className="absolute bottom-0 flex w-full justify-center rounded-b bg-gradient-to-r from-beige-100/10 via-beige-500/70 to-beige-100/10 py-1">
+                  <small className="text-grey-700">{product.rating} </small>
+                  <StarIcon className="w-3.5 text-grey-700" />
+                </div>
+              )}
             </div>
             <div className="px-4 py-2 text-center">
               <p className="py-3">
