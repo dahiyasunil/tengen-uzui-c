@@ -1,14 +1,9 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import Search from "./filters/Search";
 import Modal from "./Modal";
 import Login from "./Login";
-
-import {
-  UserCircleIcon,
-  HeartIcon,
-  ShoppingBagIcon,
-} from "@heroicons/react/24/outline";
+import UserNavigationMenu from "./UserNavigationMenu";
 
 const Header = () => {
   const [modal, setModal] = useState(false);
@@ -32,26 +27,7 @@ const Header = () => {
           </div>
           <div className="flex flex-col md:flex-row md:space-x-10">
             <Search />
-            <div className="hidden pt-1 md:flex md:space-x-5">
-              <div className="flex flex-col">
-                <NavLink onClick={loginHandler}>
-                  <UserCircleIcon className="size-5 justify-self-center text-grey-300 transition duration-200 hover:text-grey-700" />
-                </NavLink>
-                <span className="text-xs">Profile</span>
-              </div>
-              <div className="flex flex-col">
-                <NavLink onClick={loginHandler}>
-                  <HeartIcon className="size-5 justify-self-center text-grey-300 transition duration-200 hover:text-grey-700" />
-                </NavLink>
-                <span className="text-xs">Wishlist</span>
-              </div>
-              <div className="flex flex-col">
-                <NavLink>
-                  <ShoppingBagIcon className="size-5 justify-self-center text-grey-300 transition duration-200 hover:text-grey-700" />
-                </NavLink>
-                <span className="text-xs">Bag</span>
-              </div>
-            </div>
+            <UserNavigationMenu loginHandler={loginHandler} />
           </div>
         </nav>
       </header>
