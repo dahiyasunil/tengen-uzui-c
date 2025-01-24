@@ -13,7 +13,7 @@ export const fetchProducts = createAsyncThunk(
   },
 );
 
-const filters = {
+export const filters = {
   category: [],
   price: null,
   rating: null,

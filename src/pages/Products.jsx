@@ -36,8 +36,6 @@ const Products = () => {
     }
 
     if (sortBy.price) {
-      console.log(sortBy.price);
-
       if (sortBy.price === "lowToHigh") {
         productList = productList.toSorted(
           (a, b) => getFinalPrice(a) - getFinalPrice(b),

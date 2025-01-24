@@ -1,19 +1,16 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateFilters } from "../../features/productSlice";
 
 const CategoryFilter = () => {
   const dispatch = useDispatch();
-  const [selectedCategory, setSelectedCategory] = useState([]);
+  const { category } = useSelector((state) => state.product.filters);
 
   const categoryHandler = (e) => {
     const { checked, value } = e.target;
-    const category = checked
-      ? [...selectedCategory, value]
-      : selectedCategory.filter((c) => c != value);
-
-    setSelectedCategory(category);
-    dispatch(updateFilters({ category }));
+    const updatedCategory = checked
+      ? [...category, value]
+      : category.filter((c) => c != value);
+    dispatch(updateFilters({ category: updatedCategory }));
   };
 
   return (
@@ -26,6 +23,7 @@ const CategoryFilter = () => {
             id="women"
             value="women"
             className="mr-1 accent-beige-500"
+            checked={category.includes("women")}
             onChange={categoryHandler}
           />
           Women
@@ -38,6 +36,7 @@ const CategoryFilter = () => {
             id="men"
             value="men"
             className="mr-1 accent-beige-500"
+            checked={category.includes("men")}
             onChange={categoryHandler}
           />
           Men
@@ -50,6 +49,7 @@ const CategoryFilter = () => {
             id="girls"
             value="girls"
             className="mr-1 accent-beige-500"
+            checked={category.includes("girls")}
             onChange={categoryHandler}
           />
           Girls
@@ -62,6 +62,7 @@ const CategoryFilter = () => {
             id="boys"
             value="boys"
             className="mr-1 accent-beige-500"
+            checked={category.includes("boys")}
             onChange={categoryHandler}
           />
           Boys

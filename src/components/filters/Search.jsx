@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { fetchProducts } from "../../features/productSlice";
 import { useDispatch } from "react-redux";

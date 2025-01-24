@@ -1,9 +1,12 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateFilters } from "../../features/productSlice";
 import { StarIcon } from "@heroicons/react/24/solid";
 
 const RatingFilter = () => {
   const dispatch = useDispatch();
+
+  const { rating } = useSelector((state) => state.product.filters);
+
   const ratingHandler = (e) => {
     dispatch(updateFilters({ rating: e.target.value }));
   };
@@ -18,6 +21,7 @@ const RatingFilter = () => {
             id="4star"
             name="rating"
             value={4}
+            checked={rating == 4}
             className="mr-1 accent-beige-500"
             onChange={ratingHandler}
           />
@@ -37,6 +41,7 @@ const RatingFilter = () => {
             id="3star"
             name="rating"
             value={3}
+            checked={rating == 3}
             className="mr-1 accent-beige-500"
             onChange={ratingHandler}
           />
@@ -56,6 +61,7 @@ const RatingFilter = () => {
             id="2star"
             name="rating"
             value={2}
+            checked={rating == 2}
             className="mr-1 accent-beige-500"
             onChange={ratingHandler}
           />
@@ -75,6 +81,7 @@ const RatingFilter = () => {
             id="1star"
             name="rating"
             value={1}
+            checked={rating == 2}
             className="mr-1 accent-beige-500"
             onChange={ratingHandler}
           />

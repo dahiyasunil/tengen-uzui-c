@@ -1,19 +1,28 @@
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { updateFilters } from "../../features/productSlice";
 
 const PriceFilter = () => {
   const dispatch = useDispatch();
+  const { price } = useSelector((state) => state.product.filters);
   const MIN_PRICE = 100;
   const MAX_PRICE = 5000;
+  const [priceValue, setPriceValue] = useState(MIN_PRICE);
 
   const priceHandler = (e) => {
-    const price = e.target.value;
-    if (price > MIN_PRICE) {
-      dispatch(updateFilters({ price }));
+    const priceVal = e.target.value;
+    if (priceVal > MIN_PRICE) {
+      dispatch(updateFilters({ price: priceVal }));
     } else {
       dispatch(updateFilters({ price: null }));
     }
   };
+
+  useEffect(() => {
+    if (price === null) {
+      setPriceValue(MIN_PRICE);
+    }
+  }, [price]);
 
   return (
     <div className="my-8">
@@ -25,11 +34,12 @@ const PriceFilter = () => {
         </div>
         <input
           type="range"
-          id=""
           className="w-full accent-beige-500"
+          value={priceValue}
           min={MIN_PRICE}
           max={MAX_PRICE}
           step="100"
+          onChange={(e) => setPriceValue(e.target.value)}
           onMouseUp={priceHandler}
         />
       </div>

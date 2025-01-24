@@ -1,8 +1,12 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateFilters } from "../../features/productSlice";
+import { useState } from "react";
 
 const SortFilter = () => {
   const dispatch = useDispatch();
+  const { price: priceSort } = useSelector(
+    (state) => state.product.filters.sortBy,
+  );
 
   const sortFilterHandler = (e) => {
     dispatch(
@@ -20,6 +24,7 @@ const SortFilter = () => {
             id="pricelowtohigh"
             name="sort"
             value="price-lowToHigh"
+            checked={priceSort === "lowToHigh"}
             className="mr-1 accent-beige-500"
             onChange={sortFilterHandler}
           />
@@ -33,6 +38,7 @@ const SortFilter = () => {
             id="pricehightolow"
             name="sort"
             value="price-highToLow"
+            checked={priceSort === "highToLow"}
             className="mr-1 accent-beige-500"
             onChange={sortFilterHandler}
           />
