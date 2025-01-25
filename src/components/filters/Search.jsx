@@ -2,15 +2,21 @@ import { useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { fetchProducts } from "../../features/productSlice";
 import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Search = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
 
   const searchHandler = (e) => {
     if (e.key === "Enter") {
       if (searchValue.trim().length != 0) {
         dispatch(fetchProducts(searchValue));
+      }
+      if (location.pathname != "/products") {
+        navigate("/products");
       }
       setSearchValue("");
     }
