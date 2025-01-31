@@ -7,6 +7,7 @@ function Modal({ openModal, closeModal, ChildComponent }) {
   useEffect(() => {
     if (openModal) {
       ref.current?.showModal();
+      ref.current?.focus();
       document.body.style.overflow = "hidden";
     } else {
       ref.current?.close();
@@ -17,8 +18,6 @@ function Modal({ openModal, closeModal, ChildComponent }) {
       document.body.style.overflow = "auto";
     };
   }, [openModal]);
-
-  if (!openModal) return null;
 
   return (
     <dialog
@@ -34,7 +33,7 @@ function Modal({ openModal, closeModal, ChildComponent }) {
           <XMarkIcon className="m-0.5 size-6 text-grey-100 transition duration-200 hover:animate-pulse hover:text-grey-500" />
         </button>
         <div className="px-10 pt-4">
-          <ChildComponent />
+          <ChildComponent closeModal={closeModal} />
         </div>
       </div>
     </dialog>

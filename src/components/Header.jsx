@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { useState } from "react";
 import Search from "./filters/Search";
 import Modal from "./Modal";
@@ -7,9 +8,20 @@ import UserNavigationMenu from "./UserNavigationMenu";
 
 const Header = () => {
   const [modal, setModal] = useState(false);
+  const { loggedIn } = useSelector((state) => state.user);
 
   const loginHandler = () => {
-    setModal(true);
+    if (!modal && !loggedIn) setModal(true);
+  };
+
+  const renderModal = () => {
+    return (
+      <Modal
+        openModal={modal}
+        closeModal={() => setModal(false)}
+        ChildComponent={Login}
+      ></Modal>
+    );
   };
 
   return (
@@ -31,11 +43,7 @@ const Header = () => {
           </div>
         </nav>
       </header>
-      <Modal
-        openModal={modal}
-        closeModal={() => setModal(false)}
-        ChildComponent={Login}
-      ></Modal>
+      {modal && renderModal()}
     </>
   );
 };

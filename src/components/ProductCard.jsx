@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { isOnDiscount, getFinalPrice } from "../utils/getPrice";
@@ -8,6 +9,7 @@ import Login from "./Login";
 
 const ProductCard = ({ product }) => {
   const [modal, setModal] = useState(false);
+  const { loggedIn } = useSelector((state) => state.user);
 
   const getPrimaryImage = () => {
     return product.images.find((img) => img.isPrimary);
@@ -41,7 +43,7 @@ const ProductCard = ({ product }) => {
   const wishlistHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setModal(true);
+    if (!loggedIn) setModal(true);
   };
 
   return (
