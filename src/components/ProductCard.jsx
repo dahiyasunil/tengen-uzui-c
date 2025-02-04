@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { isOnDiscount, getFinalPrice } from "../utils/getPrice";
+import { addToWishlist } from "../features/userSlice";
 import Modal from "./Modal";
 import Login from "./Login";
 
 const ProductCard = ({ product }) => {
   const [modal, setModal] = useState(false);
-  const { loggedIn } = useSelector((state) => state.user);
+  const [wishlisted, setWishlisted] = useState(false);
+  const [pendingAction, setPendingAction] = useState(null);
+
+  const dispatch = useDispatch();
+  const { user, loggedIn } = useSelector((state) => state.user);
 
   const getPrimaryImage = () => {
     return product.images.find((img) => img.isPrimary);
@@ -43,8 +48,34 @@ const ProductCard = ({ product }) => {
   const wishlistHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!loggedIn) setModal(true);
+    if (!loggedIn) {
+      setPendingAction(() => () => {
+        dispatch(addToWishlist(product._id));
+      });
+      setModal(true);
+    } else {
+      dispatch(addToWishlist(product._id));
+    }
   };
+
+  const renderModal = () => {
+    return (
+      <Modal
+        openModal={modal}
+        closeModal={() => setModal(false)}
+        ChildComponent={Login}
+      ></Modal>
+    );
+  };
+
+  useEffect(() => {
+    if (loggedIn && pendingAction) {
+      console.log(`Executing pending actions..`);
+
+      pendingAction();
+      setPendingAction(null);
+    }
+  }, [loggedIn, pendingAction]);
 
   return (
     <div>
@@ -89,11 +120,7 @@ const ProductCard = ({ product }) => {
           </div>
         </Link>
       </div>
-      <Modal
-        openModal={modal}
-        closeModal={() => setModal(false)}
-        ChildComponent={Login}
-      ></Modal>
+      {modal && renderModal()}
     </div>
   );
 };
