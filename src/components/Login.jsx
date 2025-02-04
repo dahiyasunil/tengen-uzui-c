@@ -7,8 +7,6 @@ const Login = ({ closeModal }) => {
   const [mobileNo, setMobileNumber] = useState("");
   const [error, setError] = useState(null);
   const { loggedIn } = useSelector((state) => state.user);
-  const data = useSelector((state) => state.user);
-  console.log(data);
 
   useEffect(() => {
     if (loggedIn) closeModal();

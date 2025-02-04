@@ -10,7 +10,7 @@ const Header = () => {
   const [modal, setModal] = useState(false);
   const { loggedIn } = useSelector((state) => state.user);
 
-  const loginHandler = () => {
+  const loginDialogHandler = () => {
     if (!modal && !loggedIn) setModal(true);
   };
 
@@ -39,7 +39,7 @@ const Header = () => {
           </div>
           <div className="flex flex-col md:flex-row md:space-x-10">
             <Search />
-            <UserNavigationMenu loginHandler={loginHandler} />
+            <UserNavigationMenu loginDialogHandler={loginDialogHandler} />
           </div>
         </nav>
       </header>
