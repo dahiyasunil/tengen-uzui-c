@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { isOnDiscount, getFinalPrice } from "../utils/getPrice";
-import { addToWishlist } from "../features/userSlice";
+import { addToWishlist, removeFromWishlist } from "../features/userSlice";
 import Modal from "./Modal";
 import Login from "./Login";
 
@@ -49,13 +49,24 @@ const ProductCard = ({ product }) => {
     e.preventDefault();
     e.stopPropagation();
     if (!loggedIn) {
-      setPendingAction(() => () => {
-        dispatch(addToWishlist(product._id));
-      });
       setModal(true);
+      if (wishlisted) {
+        setPendingAction(() => () => {
+          dispatch(removeFromWishlist(product._id));
+        });
+      } else {
+        setPendingAction(() => () => {
+          dispatch(addToWishlist(product._id));
+        });
+      }
     } else {
-      dispatch(addToWishlist(product._id));
+      if (wishlisted) {
+        dispatch(removeFromWishlist(product._id));
+      } else {
+        dispatch(addToWishlist(product._id));
+      }
     }
+    setWishlisted(!wishlisted);
   };
 
   const renderModal = () => {
@@ -70,8 +81,6 @@ const ProductCard = ({ product }) => {
 
   useEffect(() => {
     if (loggedIn && pendingAction) {
-      console.log(`Executing pending actions..`);
-
       pendingAction();
       setPendingAction(null);
     }

@@ -10,6 +10,8 @@ const Wishlist = () => {
   const error = useSelector((state) => state.user.error);
   const wishlist = useSelector((state) => state.user.user.wishlist);
 
+  // console.log(wishlist);
+
   useEffect(() => {
     if (loggedIn) {
       dispatch(getWishlistItems());

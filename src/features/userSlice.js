@@ -28,8 +28,23 @@ export const getWishlistItems = createAsyncThunk(
 export const addToWishlist = createAsyncThunk(
   "user/addToWishlist",
   async (productObjId, { getState }) => {
+    console.log("Adding to wishlist");
     const userId = getState().user.user._id || getState().user.user.user._id;
     const response = await axios.put(`${serverUrl}/api/user/wishlist/add`, {
+      userId,
+      productObjId,
+    });
+    return response.data;
+  },
+);
+
+export const removeFromWishlist = createAsyncThunk(
+  "user/removeFromWishlist",
+  async (productObjId, { getState }) => {
+    console.log("Removing from wishlist");
+
+    const userId = getState().user.user._id || getState().user.user.user._id;
+    const response = await axios.put(`${serverUrl}/api/user/wishlist/remove`, {
       userId,
       productObjId,
     });
@@ -65,10 +80,21 @@ const userSlice = createSlice({
     });
     builder.addCase(addToWishlist.fulfilled, (state, action) => {
       state.status = "addedToWishList";
-      state.user = action.payload;
+      state.user.wishlist = action.payload.wishlist;
     });
     builder.addCase(addToWishlist.rejected, (state, action) => {
       state.status = "failedToWishlist";
+      state.error = action.payload;
+    });
+    builder.addCase(removeFromWishlist.pending, (state) => {
+      state.status = "removingFromWishlist";
+    });
+    builder.addCase(removeFromWishlist.fulfilled, (state, action) => {
+      state.status = "removedFromWishList";
+      state.user.wishlist = action.payload.wishlist;
+    });
+    builder.addCase(removeFromWishlist.rejected, (state, action) => {
+      state.status = "failedToRemoveFromWishlist";
       state.error = action.payload;
     });
     builder.addCase(getWishlistItems.pending, (state) => {
