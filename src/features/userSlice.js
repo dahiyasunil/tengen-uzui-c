@@ -52,8 +52,18 @@ export const removeFromWishlist = createAsyncThunk(
   },
 );
 
+const user = {
+  mobileNumber: null,
+  name: "",
+  emailId: "",
+  addresses: [],
+  wishlist: [],
+  bag: [],
+  orders: [],
+};
+
 const initialState = {
-  user: null,
+  user,
   loggedIn: false,
   status: "idle",
   error: null,
@@ -62,6 +72,19 @@ const initialState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
+  reducers: {
+    addItemToCartAction: (state, action) => {
+      const itemIndex = state.user.bag.findIndex(
+        (item) => item.item._id === action.payload._id,
+      );
+      if (itemIndex != -1) {
+        const quantity = state.user.bag[itemIndex].quantity + 1;
+        state.user.bag[itemIndex] = { item: action.payload, quantity };
+      } else {
+        state.user.bag.push({ item: action.payload, quantity: 1 });
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(loginUser.pending, (state) => {
       state.status = "verifyingUser";
@@ -111,4 +134,5 @@ const userSlice = createSlice({
   },
 });
 
+export const { addItemToCartAction } = userSlice.actions;
 export default userSlice.reducer;
