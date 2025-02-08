@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/solid";
-import { isOnDiscount, getFinalPrice } from "../utils/getPrice";
+import ShowPrice from "./ShowPrice";
 import { addToWishlist, removeFromWishlist } from "../features/userSlice";
+import { addToCart } from "../utils/cartHandler";
 import Modal from "./Modal";
 import Login from "./Login";
 
@@ -18,31 +19,6 @@ const ProductCard = ({ product }) => {
 
   const getPrimaryImage = () => {
     return product.images.find((img) => img.isPrimary);
-  };
-
-  const showPrice = () => {
-    return (
-      <p>
-        <small>
-          {isOnDiscount(product) ? (
-            <span className="font-semibold">
-              &#8377;{getFinalPrice(product)}{" "}
-              <span className="font-normal text-grey-100 line-through">
-                &#8377;{product.price.amount}
-              </span>
-              <span>
-                <small className="font-extralight text-beige-700">
-                  {" "}
-                  ({product.discount.percentage}% off)
-                </small>
-              </span>
-            </span>
-          ) : (
-            <span className="font-semibold">&#8377;{product.price.amount}</span>
-          )}
-        </small>
-      </p>
-    );
   };
 
   const wishlistHandler = (e) => {
@@ -67,6 +43,12 @@ const ProductCard = ({ product }) => {
       }
     }
     setWishlisted(!wishlisted);
+  };
+
+  const addToCartHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart(dispatch, loggedIn, product);
   };
 
   const renderModal = () => {
@@ -119,10 +101,13 @@ const ProductCard = ({ product }) => {
               <p>
                 <small>{product.title}</small>
               </p>
-              {showPrice()}
+              <ShowPrice product={product} />
             </div>
             <div className="flex">
-              <button className="mx-auto w-11/12 justify-center rounded-md bg-grey-300 py-1 text-white transition hover:bg-grey-500">
+              <button
+                className="mx-auto w-11/12 justify-center rounded-md bg-grey-300 py-1 text-white transition hover:bg-grey-500"
+                onClick={addToCartHandler}
+              >
                 <small>Add to cart</small>
               </button>
             </div>
