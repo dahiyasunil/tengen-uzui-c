@@ -5,9 +5,14 @@ const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async (keywords) => {
+  async (keywords, { getState }) => {
+    const { user } = getState().user;
+    const userMobileNo = user.mobileNumber;
     const response = await axios.get(`${serverUrl}/api/products/`, {
       params: { search: keywords },
+      headers: {
+        "X-Mobile-No": userMobileNo,
+      },
     });
     return response.data;
   },
