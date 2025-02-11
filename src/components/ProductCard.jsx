@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { HeartIcon } from "@heroicons/react/24/outline";
-import { StarIcon } from "@heroicons/react/24/solid";
+
+import {
+  HeartIcon as HeartIconSolid,
+  StarIcon,
+} from "@heroicons/react/24/solid";
 import ShowPrice from "./ShowPrice";
 import { addToWishlist, removeFromWishlist } from "../features/userSlice";
 import { addToCart } from "../utils/cartHandler";
@@ -83,7 +87,11 @@ const ProductCard = ({ product }) => {
                 onClick={wishlistHandler}
                 className="absolute right-2 top-1 rounded-full outline-none"
               >
-                <HeartIcon className="m-0.5 size-8 text-beige-100/70 transition duration-200 hover:animate-pulse hover:text-beige-300" />
+                {product?.isWishlisted ? (
+                  <HeartIconSolid className="m-0.5 size-8 text-red-500 transition duration-200 hover:animate-pulse hover:text-beige-300" />
+                ) : (
+                  <HeartIcon className="m-0.5 size-8 text-beige-100/90 transition duration-200 hover:animate-pulse hover:text-beige-300" />
+                )}
               </button>
               {product.rating && (
                 <div className="absolute bottom-0 flex w-full justify-center rounded-b bg-gradient-to-r from-beige-100/10 via-beige-500/70 to-beige-100/10 py-1">
