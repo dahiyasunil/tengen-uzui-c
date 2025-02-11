@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { act } from "react";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
@@ -55,6 +56,18 @@ const productSlice = createSlice({
       state.filters = { ...state.filters, ...action.payload };
       state.isFilter = isAnyFilterSet(state.filters);
     },
+    addProductToWishlist: (state, action) => {
+      const productIndex = state.products.findIndex(
+        (product) => product._id === action.payload,
+      );
+      state.products[productIndex].isWishlisted = true;
+    },
+    removeProductFromWishlist: (state, action) => {
+      const productIndex = state.products.findIndex(
+        (product) => product._id === action.payload,
+      );
+      state.products[productIndex].isWishlisted = false;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchProducts.pending, (state) => {
@@ -71,5 +84,9 @@ const productSlice = createSlice({
   },
 });
 
-export const { updateFilters } = productSlice.actions;
+export const {
+  updateFilters,
+  addProductToWishlist,
+  removeProductFromWishlist,
+} = productSlice.actions;
 export default productSlice.reducer;

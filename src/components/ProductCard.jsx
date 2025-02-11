@@ -9,13 +9,16 @@ import {
 } from "@heroicons/react/24/solid";
 import ShowPrice from "./ShowPrice";
 import { addToWishlist, removeFromWishlist } from "../features/userSlice";
+import {
+  addProductToWishlist,
+  removeProductFromWishlist,
+} from "../features/productSlice";
 import { addToCart } from "../utils/cartHandler";
 import Modal from "./Modal";
 import Login from "./Login";
 
 const ProductCard = ({ product }) => {
   const [modal, setModal] = useState(false);
-  const [wishlisted, setWishlisted] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
 
   const dispatch = useDispatch();
@@ -30,23 +33,19 @@ const ProductCard = ({ product }) => {
     e.stopPropagation();
     if (!loggedIn) {
       setModal(true);
-      if (wishlisted) {
-        setPendingAction(() => () => {
-          dispatch(removeFromWishlist(product._id));
-        });
-      } else {
-        setPendingAction(() => () => {
-          dispatch(addToWishlist(product._id));
-        });
-      }
+      setPendingAction(() => () => {
+        dispatch(addToWishlist(product._id));
+        dispatch(addProductToWishlist(product._id));
+      });
     } else {
-      if (wishlisted) {
+      if (product.isWishlisted) {
         dispatch(removeFromWishlist(product._id));
+        dispatch(removeProductFromWishlist(product._id));
       } else {
         dispatch(addToWishlist(product._id));
+        dispatch(addProductToWishlist(product._id));
       }
     }
-    setWishlisted(!wishlisted);
   };
 
   const addToCartHandler = (e) => {
