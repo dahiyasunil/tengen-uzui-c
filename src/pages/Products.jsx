@@ -2,6 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../components/ProductCard";
 import FilterAside from "../components/FilterAside";
 import { getFinalPrice } from "../utils/getPrice";
+import { useEffect } from "react";
+import { fetchProducts } from "../features/productSlice";
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -51,6 +53,12 @@ const Products = () => {
       productList = products;
     }
   }
+
+  useEffect(() => {
+    if (products.length === 0) {
+      dispatch(fetchProducts());
+    }
+  }, [products]);
 
   return (
     <div className="container py-10">
