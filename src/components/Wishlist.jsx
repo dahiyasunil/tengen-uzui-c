@@ -16,6 +16,12 @@ const Wishlist = () => {
     }
   }, [loggedIn]);
 
+  useEffect(() => {
+    if (wishlist.length > 0 && !checkWishlistPopulated()) {
+      dispatch(getWishlistItems());
+    }
+  }, [wishlist]);
+
   if (status === "fetchingWishlistItems") {
     return (
       <div className="mt-12 text-center">
