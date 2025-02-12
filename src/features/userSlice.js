@@ -28,7 +28,6 @@ export const getWishlistItems = createAsyncThunk(
 export const addToWishlist = createAsyncThunk(
   "user/addToWishlist",
   async (productObjId, { getState }) => {
-    console.log("Adding to wishlist");
     const userId = getState().user.user._id || getState().user.user.user._id;
     const response = await axios.put(`${serverUrl}/api/user/wishlist/add`, {
       userId,
@@ -41,8 +40,6 @@ export const addToWishlist = createAsyncThunk(
 export const removeFromWishlist = createAsyncThunk(
   "user/removeFromWishlist",
   async (productObjId, { getState }) => {
-    console.log("Removing from wishlist");
-
     const userId = getState().user.user._id || getState().user.user.user._id;
     const response = await axios.put(`${serverUrl}/api/user/wishlist/remove`, {
       userId,
