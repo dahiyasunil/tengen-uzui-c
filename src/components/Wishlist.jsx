@@ -5,16 +5,9 @@ import ProductCard from "./ProductCard";
 
 const Wishlist = () => {
   const dispatch = useDispatch();
-  const loggedIn = useSelector((state) => state.user.loggedIn);
   const status = useSelector((state) => state.user.status);
   const error = useSelector((state) => state.user.error);
   const wishlist = useSelector((state) => state.user.user.wishlist);
-
-  useEffect(() => {
-    if (loggedIn) {
-      dispatch(getWishlistItems());
-    }
-  }, [loggedIn]);
 
   useEffect(() => {
     if (wishlist.length > 0 && !checkWishlistPopulated()) {
