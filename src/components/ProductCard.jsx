@@ -22,7 +22,7 @@ const ProductCard = ({ product }) => {
   const [pendingAction, setPendingAction] = useState(null);
 
   const dispatch = useDispatch();
-  const { user, loggedIn } = useSelector((state) => state.user);
+  const { loggedIn } = useSelector((state) => state.user);
 
   const getPrimaryImage = () => {
     return product.images.find((img) => img.isPrimary);
