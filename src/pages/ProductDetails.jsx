@@ -1,13 +1,27 @@
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getFinalPrice, isOnDiscount } from "../utils/getPrice";
 import { HeartIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { addToCart } from "../utils/cartHandler";
+import { addToWishlist, removeFromWishlist } from "../features/userSlice";
+import {
+  addProductToWishlist,
+  removeProductFromWishlist,
+} from "../features/productSlice";
+import Modal from "../components/Modal";
+import Login from "../components/Login";
 
 const ProductDetails = () => {
   const { productId } = useParams();
+  const dispatch = useDispatch();
+  const { loggedIn } = useSelector((state) => state.user);
   const product = useSelector((state) =>
     state.product.products.find((p) => p._id == productId),
   );
+
+  const [modal, setModal] = useState(false);
+  const [pendingAction, setPendingAction] = useState(null);
 
   if (!product) {
     return (
@@ -18,6 +32,49 @@ const ProductDetails = () => {
       </div>
     );
   }
+
+  const wishlistHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!loggedIn) {
+      setModal(true);
+      setPendingAction(() => () => {
+        dispatch(addToWishlist(product._id));
+        dispatch(addProductToWishlist(product._id));
+      });
+    } else {
+      if (product.isWishlisted) {
+        dispatch(removeFromWishlist(product._id));
+        dispatch(removeProductFromWishlist(product._id));
+      } else {
+        dispatch(addToWishlist(product._id));
+        dispatch(addProductToWishlist(product._id));
+      }
+    }
+  };
+
+  const addToCartHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart(dispatch, loggedIn, product);
+  };
+
+  const renderModal = () => {
+    return (
+      <Modal
+        openModal={modal}
+        closeModal={() => setModal(false)}
+        ChildComponent={Login}
+      ></Modal>
+    );
+  };
+
+  useEffect(() => {
+    if (loggedIn && pendingAction) {
+      pendingAction();
+      setPendingAction(null);
+    }
+  }, [loggedIn, pendingAction]);
 
   return (
     <div className="container my-8 lg:my-16">
@@ -77,13 +134,19 @@ const ProductDetails = () => {
                 </div>
               </div>
               <div className="my-4 flex flex-col items-center justify-center space-y-4 md:flex-row md:justify-start md:space-x-6 md:space-y-0">
-                <button className="delay-50 flex w-2/3 items-center justify-center rounded bg-beige-100 py-2 transition duration-300 ease-in-out hover:scale-105 lg:w-1/3">
+                <button
+                  className="delay-50 flex w-2/3 items-center justify-center rounded bg-beige-100 py-2 transition duration-300 ease-in-out hover:scale-105 lg:w-1/3"
+                  onClick={addToCartHandler}
+                >
                   <span>
                     <ShoppingBagIcon className="mr-2 w-4" />
                   </span>
                   ADD TO BAG
                 </button>
-                <button className="delay-50 flex w-2/3 items-center justify-center rounded border-2 border-beige-100 py-2 transition duration-300 ease-in-out hover:scale-105 lg:w-1/3">
+                <button
+                  className="delay-50 flex w-2/3 items-center justify-center rounded border-2 border-beige-100 py-2 transition duration-300 ease-in-out hover:scale-105 lg:w-1/3"
+                  onClick={wishlistHandler}
+                >
                   <span>
                     <HeartIcon className="mr-2 w-4" />
                   </span>
@@ -134,6 +197,7 @@ const ProductDetails = () => {
           <p className="mt-3">Similar Products</p>
         </div>
       </div>
+      {modal && renderModal()}
     </div>
   );
 };
