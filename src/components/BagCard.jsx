@@ -6,9 +6,9 @@ import Modal from "./Modal";
 import Login from "./Login";
 import { handleWishlisting } from "../utils/wishlistHandler";
 import { removeFromCart } from "../utils/cartHandler";
+import { updateItemQuantityAction } from "../features/userSlice";
 
 const BagCard = ({ item }) => {
-  const [itemQuantity, setItemQuantity] = useState(item.quantity);
   const [modal, setModal] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
 
@@ -20,7 +20,15 @@ const BagCard = ({ item }) => {
   };
 
   const quantityHandler = (e) => {
-    setItemQuantity(e.target.value);
+    if (loggedIn) {
+    } else {
+      dispatch(
+        updateItemQuantityAction({
+          productObjId: item.item._id,
+          quantity: e.target.value,
+        }),
+      );
+    }
   };
 
   const removeFromCartHandler = (e) => {
@@ -74,15 +82,12 @@ const BagCard = ({ item }) => {
             <ShowPrice product={item.item} />
             <div className="text-xs">
               <label htmlFor="">Quantity: </label>
-              <select
-                name=""
-                id=""
-                value={itemQuantity}
-                onChange={quantityHandler}
-              >
+              <select value={item.quantity} onChange={quantityHandler}>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
               </select>
             </div>
             <div className="content-end">

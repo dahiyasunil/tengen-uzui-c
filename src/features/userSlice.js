@@ -124,6 +124,12 @@ const userSlice = createSlice({
         (item) => item.item._id != action.payload._id,
       );
     },
+    updateItemQuantityAction: (state, action) => {
+      const itemIndex = state.user.bag.findIndex(
+        (item) => item.item._id === action.payload.productObjId,
+      );
+      state.user.bag[itemIndex].quantity = action.payload.quantity;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(loginUser.pending, (state) => {
@@ -207,6 +213,9 @@ const userSlice = createSlice({
   },
 });
 
-export const { addItemToCartAction, removeItemFromCartAction } =
-  userSlice.actions;
+export const {
+  addItemToCartAction,
+  removeItemFromCartAction,
+  updateItemQuantityAction,
+} = userSlice.actions;
 export default userSlice.reducer;
