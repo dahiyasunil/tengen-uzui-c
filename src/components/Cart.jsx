@@ -59,9 +59,9 @@ const Cart = () => {
             {bag.map((item) => (
               <div
                 key={item.item._id}
-                className="bottom-2 mb-4 w-4/6 justify-self-end border"
+                className="bottom-2 mb-4 w-5/6 justify-self-end border"
               >
-                <BagCard item={item.item} />
+                <BagCard item={item} />
               </div>
             ))}
           </section>
