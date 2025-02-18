@@ -4,13 +4,9 @@ import { useParams } from "react-router-dom";
 import { getFinalPrice, isOnDiscount } from "../utils/getPrice";
 import { HeartIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
 import { addToCart } from "../utils/cartHandler";
-import { addToWishlist, removeFromWishlist } from "../features/userSlice";
-import {
-  addProductToWishlist,
-  removeProductFromWishlist,
-} from "../features/productSlice";
 import Modal from "../components/Modal";
 import Login from "../components/Login";
+import { handleWishlisting } from "../utils/wishlistHandler";
 
 const ProductDetails = () => {
   const { productId } = useParams();
@@ -36,21 +32,7 @@ const ProductDetails = () => {
   const wishlistHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!loggedIn) {
-      setModal(true);
-      setPendingAction(() => () => {
-        dispatch(addToWishlist(product._id));
-        dispatch(addProductToWishlist(product._id));
-      });
-    } else {
-      if (product.isWishlisted) {
-        dispatch(removeFromWishlist(product._id));
-        dispatch(removeProductFromWishlist(product._id));
-      } else {
-        dispatch(addToWishlist(product._id));
-        dispatch(addProductToWishlist(product._id));
-      }
-    }
+    handleWishlisting(dispatch, loggedIn, setModal, setPendingAction, product);
   };
 
   const addToCartHandler = (e) => {

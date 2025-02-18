@@ -8,14 +8,10 @@ import {
   StarIcon,
 } from "@heroicons/react/24/solid";
 import ShowPrice from "./ShowPrice";
-import { addToWishlist, removeFromWishlist } from "../features/userSlice";
-import {
-  addProductToWishlist,
-  removeProductFromWishlist,
-} from "../features/productSlice";
 import { addToCart } from "../utils/cartHandler";
 import Modal from "./Modal";
 import Login from "./Login";
+import { handleWishlisting } from "../utils/wishlistHandler";
 
 const ProductCard = ({ product }) => {
   const [modal, setModal] = useState(false);
@@ -31,21 +27,7 @@ const ProductCard = ({ product }) => {
   const wishlistHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!loggedIn) {
-      setModal(true);
-      setPendingAction(() => () => {
-        dispatch(addToWishlist(product._id));
-        dispatch(addProductToWishlist(product._id));
-      });
-    } else {
-      if (product.isWishlisted) {
-        dispatch(removeFromWishlist(product._id));
-        dispatch(removeProductFromWishlist(product._id));
-      } else {
-        dispatch(addToWishlist(product._id));
-        dispatch(addProductToWishlist(product._id));
-      }
-    }
+    handleWishlisting(dispatch, loggedIn, setModal, setPendingAction, product);
   };
 
   const addToCartHandler = (e) => {
