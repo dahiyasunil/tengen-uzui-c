@@ -1,26 +1,112 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import ShowPrice from "./ShowPrice";
+import Modal from "./Modal";
+import Login from "./Login";
+import { handleWishlisting } from "../utils/wishlistHandler";
+import { removeFromCart } from "../utils/cartHandler";
 
 const BagCard = ({ item }) => {
+  const [itemQuantity, setItemQuantity] = useState(item.quantity);
+  const [modal, setModal] = useState(false);
+  const [pendingAction, setPendingAction] = useState(null);
+
+  const dispatch = useDispatch();
+  const { loggedIn } = useSelector((state) => state.user);
+
   const getPrimaryImage = () => {
-    return item.images.find((img) => img.isPrimary);
+    return item.item.images.find((img) => img.isPrimary);
   };
+
+  const quantityHandler = (e) => {
+    setItemQuantity(e.target.value);
+  };
+
+  const removeFromCartHandler = (e) => {
+    removeFromCart(dispatch, loggedIn, item.item);
+  };
+
+  const wishlistHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    handleWishlisting(
+      dispatch,
+      loggedIn,
+      setModal,
+      setPendingAction,
+      item.item,
+    );
+  };
+
+  const renderModal = () => {
+    return (
+      <Modal
+        openModal={modal}
+        closeModal={() => setModal(false)}
+        ChildComponent={Login}
+      ></Modal>
+    );
+  };
+
+  useEffect(() => {
+    if (loggedIn && pendingAction) {
+      pendingAction();
+      setPendingAction(null);
+    }
+  }, [loggedIn, pendingAction]);
 
   return (
     <div>
-      <Link to={`/productDetails/${item._id}`}>
-        <div className="flex flex-col sm:flex-row">
-          <div>
-            <img src={getPrimaryImage().url} alt={item.name} className="w-28" />
-          </div>
-          <div className="px-4 py-2">
+      <div>
+        <div className="grid grid-cols-12">
+          <Link className="col-span-4" to={`/productDetails/${item.item._id}`}>
+            <img
+              src={getPrimaryImage().url}
+              alt={item.item.name}
+              className="w-36"
+            />
+          </Link>
+          <div className="col-span-8 grid px-6 py-2">
             <p>
-              <small>{item.title}</small>
+              <small>{item.item.title}</small>
             </p>
-            <ShowPrice product={item} />
+            <ShowPrice product={item.item} />
+            <div className="text-xs">
+              <label htmlFor="">Quantity: </label>
+              <select
+                name=""
+                id=""
+                value={itemQuantity}
+                onChange={quantityHandler}
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+            <div className="content-end">
+              <div>
+                <button
+                  className="mb-1 w-full rounded bg-grey-100/80 px-3 py-1 text-xs text-white hover:bg-grey-100"
+                  onClick={removeFromCartHandler}
+                >
+                  Remove from cart
+                </button>
+              </div>
+              <div>
+                <button
+                  className="w-full rounded bg-beige-100/80 px-3 py-1 text-xs hover:bg-beige-100"
+                  onClick={wishlistHandler}
+                >
+                  Move to wishlist
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </Link>
+      </div>
+      {modal && renderModal()}
     </div>
   );
 };
