@@ -80,6 +80,19 @@ export const addItemToCartThunk = createAsyncThunk(
   },
 );
 
+export const removeItemFromCartThunk = createAsyncThunk(
+  "user/removeItemFromCart",
+  async (itemData, { getState }) => {
+    const { productObjId } = itemData;
+    const userId = getState().user.user._id || getState().user.user.user._id;
+    const response = await axios.put(`${serverUrl}/api/user/cart/remove`, {
+      userId,
+      productObjId,
+    });
+    return response.data;
+  },
+);
+
 export const getCartItems = createAsyncThunk(
   "user/getCartDetails",
   async (_, { getState }) => {
@@ -105,6 +118,11 @@ const userSlice = createSlice({
       } else {
         state.user.bag.push({ item: action.payload, quantity: 1 });
       }
+    },
+    removeItemFromCartAction: (state, action) => {
+      state.user.bag = state.user.bag.filter(
+        (item) => item.item._id != action.payload._id,
+      );
     },
   },
   extraReducers: (builder) => {
@@ -164,7 +182,6 @@ const userSlice = createSlice({
       state.status = "failedToAddToCart";
       state.error = action.payload;
     });
-
     builder.addCase(getCartItems.pending, (state) => {
       state.status = "fetchingCartItems";
     });
@@ -176,8 +193,20 @@ const userSlice = createSlice({
       state.status = "failedToFetchCartItems";
       state.error = action.payload;
     });
+    builder.addCase(removeItemFromCartThunk.pending, (state) => {
+      state.status = "removingFromCart";
+    });
+    builder.addCase(removeItemFromCartThunk.fulfilled, (state, action) => {
+      state.status = "removedFromCart";
+      state.user.bag = action.payload.cart;
+    });
+    builder.addCase(removeItemFromCartThunk.rejected, (state, action) => {
+      state.status = "failedToRemoveFromWCart";
+      state.error = action.payload;
+    });
   },
 });
 
-export const { addItemToCartAction } = userSlice.actions;
+export const { addItemToCartAction, removeItemFromCartAction } =
+  userSlice.actions;
 export default userSlice.reducer;
