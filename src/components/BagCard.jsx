@@ -54,6 +54,9 @@ const BagCard = ({ item }) => {
       setPendingAction,
       item.item,
     );
+    if (loggedIn) {
+      removeFromCart(dispatch, loggedIn, item.item);
+    }
   };
 
   const renderModal = () => {
