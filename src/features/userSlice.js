@@ -104,6 +104,22 @@ export const getCartItems = createAsyncThunk(
   },
 );
 
+export const updatedItemQuantityThunk = createAsyncThunk(
+  "user/updatedItemQuanity",
+  async ({ productObjId, quantity }, { getState }) => {
+    const userId = getState().user.user._id || getState().user.user.user._id;
+    const response = await axios.put(
+      `${serverUrl}/api/user/cart/item/quantity`,
+      {
+        userId,
+        productObjId,
+        quantity,
+      },
+    );
+    return response.data;
+  },
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -208,6 +224,17 @@ const userSlice = createSlice({
     });
     builder.addCase(removeItemFromCartThunk.rejected, (state, action) => {
       state.status = "failedToRemoveFromWCart";
+      state.error = action.payload;
+    });
+    builder.addCase(updatedItemQuantityThunk.pending, (state) => {
+      state.status = "updatingItemQuanity";
+    });
+    builder.addCase(updatedItemQuantityThunk.fulfilled, (state, action) => {
+      state.status = "quantityUpdated";
+      state.user.bag = action.payload.cart;
+    });
+    builder.addCase(updatedItemQuantityThunk.rejected, (state, action) => {
+      state.status = "failedToUpdatedQuantity";
       state.error = action.payload;
     });
   },
