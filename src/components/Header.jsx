@@ -9,9 +9,11 @@ import UserNavigationMenu from "./UserNavigationMenu";
 const Header = () => {
   const [modal, setModal] = useState(false);
   const { loggedIn } = useSelector((state) => state.user);
+  const [route, setRoute] = useState("/");
 
-  const loginDialogHandler = () => {
+  const loginDialogHandler = (route) => {
     if (!modal && !loggedIn) setModal(true);
+    setRoute(route);
   };
 
   const renderModal = () => {
@@ -20,6 +22,7 @@ const Header = () => {
         openModal={modal}
         closeModal={() => setModal(false)}
         ChildComponent={Login}
+        route={route}
       ></Modal>
     );
   };

@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { HeartIcon } from "@heroicons/react/24/outline";
-import { useEffect } from "react";
 
 const WishlistMenu = ({ loginDialogHandler }) => {
   const navigate = useNavigate();
@@ -10,15 +9,10 @@ const WishlistMenu = ({ loginDialogHandler }) => {
   const wishlistHandler = () => {
     if (loggedIn) {
       navigate("/wishlist");
+    } else {
+      loginDialogHandler("/wishlist");
     }
-    loginDialogHandler();
   };
-
-  useEffect(() => {
-    if (loggedIn) {
-      navigate("/wishlist");
-    }
-  }, [loggedIn]);
 
   return (
     <div className="flex flex-col">

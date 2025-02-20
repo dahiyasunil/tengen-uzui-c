@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../features/userSlice";
+import { useNavigate } from "react-router-dom";
 
-const Login = ({ closeModal }) => {
+const Login = ({ closeModal, route }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [mobileNo, setMobileNumber] = useState("");
   const [error, setError] = useState(null);
   const { loggedIn } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (loggedIn) closeModal();
+    if (loggedIn) {
+      closeModal();
+      navigate(route);
+    }
   }, [loggedIn, closeModal]);
 
   const continueHandler = (e) => {

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
-function Modal({ openModal, closeModal, ChildComponent }) {
+function Modal({ openModal, closeModal, ChildComponent, route }) {
   const ref = useRef();
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function Modal({ openModal, closeModal, ChildComponent }) {
           <XMarkIcon className="m-0.5 size-6 text-grey-100 transition duration-200 hover:animate-pulse hover:text-grey-500" />
         </button>
         <div className="px-10 pt-4">
-          <ChildComponent closeModal={closeModal} />
+          <ChildComponent closeModal={closeModal} route={route} />
         </div>
       </div>
     </dialog>
