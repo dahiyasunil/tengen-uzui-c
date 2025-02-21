@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import ShowPrice from "./ShowPrice";
-import Modal from "./Modal";
-import Login from "./Login";
-import { handleWishlisting } from "../utils/wishlistHandler";
-import { removeFromCart } from "../utils/cartHandler";
+import ShowPrice from "../ShowPrice";
+import Modal from "../Modal";
+import Login from "../Login";
+import { handleWishlisting } from "../../utils/wishlistHandler";
+import { removeFromCart } from "../../utils/cartHandler";
 import {
   updateItemQuantityAction,
   updatedItemQuantityThunk,
-} from "../features/userSlice";
+} from "../../features/userSlice";
 
 const BagCard = ({ item }) => {
   const [modal, setModal] = useState(false);

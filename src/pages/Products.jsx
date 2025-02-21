@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "../components/cards/ProductCard";
 import FilterAside from "../components/FilterAside";
 import { getFinalPrice } from "../utils/getPrice";
 import { useEffect } from "react";

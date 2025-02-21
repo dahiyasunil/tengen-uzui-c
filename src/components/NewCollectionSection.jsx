@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchProducts } from "../features/productSlice";
-import NewArrivalCard from "../components/NewArrivalCard";
+import NewArrivalCard from "./cards/NewArrivalCard";
 
 const NewCollectionSection = () => {
   const dispatch = useDispatch();

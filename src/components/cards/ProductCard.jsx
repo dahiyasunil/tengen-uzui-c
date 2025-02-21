@@ -2,16 +2,15 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { HeartIcon } from "@heroicons/react/24/outline";
-
 import {
   HeartIcon as HeartIconSolid,
   StarIcon,
 } from "@heroicons/react/24/solid";
-import ShowPrice from "./ShowPrice";
-import { addToCart } from "../utils/cartHandler";
-import Modal from "./Modal";
-import Login from "./Login";
-import { handleWishlisting } from "../utils/wishlistHandler";
+import ShowPrice from "../ShowPrice";
+import { addToCart } from "../../utils/cartHandler";
+import Modal from "../Modal";
+import Login from "../Login";
+import { handleWishlisting } from "../../utils/wishlistHandler";
 
 const ProductCard = ({ product }) => {
   const [modal, setModal] = useState(false);

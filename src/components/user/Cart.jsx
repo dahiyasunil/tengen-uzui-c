@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getFinalPrice } from "../utils/getPrice";
+import { getFinalPrice } from "../../utils/getPrice";
+import { getCartItems } from "../../features/userSlice";
+import BagCard from "../cards/BagCard";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
-import { getCartItems } from "../features/userSlice";
-import BagCard from "./BagCard";
 
 const Cart = () => {
   const dispatch = useDispatch();
