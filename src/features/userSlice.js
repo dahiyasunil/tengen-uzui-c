@@ -120,10 +120,27 @@ export const updatedItemQuantityThunk = createAsyncThunk(
   },
 );
 
+export const updateUserPersonalDetails = createAsyncThunk(
+  "user/updatePersonalInfo",
+  async (payload, { getState }) => {
+    console.log("Thunk");
+    const userId = getState().user.user._id || getState().user.user.user._id;
+    const response = await axios.put(`${serverUrl}/api/user/update/details`, {
+      userId,
+      payload,
+    });
+    console.log(response.data);
+    return response.data;
+  },
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    resetStatus: (state) => {
+      state.status = "idle";
+    },
     addItemToCartAction: (state, action) => {
       const itemIndex = state.user.bag.findIndex(
         (item) => item.item._id === action.payload._id,
@@ -237,10 +254,23 @@ const userSlice = createSlice({
       state.status = "failedToUpdatedQuantity";
       state.error = action.payload;
     });
+    builder.addCase(updateUserPersonalDetails.pending, (state) => {
+      state.status = "updatingUserInfo";
+    });
+    builder.addCase(updateUserPersonalDetails.fulfilled, (state, action) => {
+      state.status = "userInfoUpdated";
+      console.log(action.payload.user);
+      state.user = action.payload.user;
+    });
+    builder.addCase(updateUserPersonalDetails.rejected, (state, action) => {
+      state.status = "failedToUpdateUserInfo";
+      state.error = action.payload;
+    });
   },
 });
 
 export const {
+  resetStatus,
   addItemToCartAction,
   removeItemFromCartAction,
   updateItemQuantityAction,
