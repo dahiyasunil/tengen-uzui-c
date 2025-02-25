@@ -123,13 +123,60 @@ export const updatedItemQuantityThunk = createAsyncThunk(
 export const updateUserPersonalDetails = createAsyncThunk(
   "user/updatePersonalInfo",
   async (payload, { getState }) => {
-    console.log("Thunk");
     const userId = getState().user.user._id || getState().user.user.user._id;
     const response = await axios.put(`${serverUrl}/api/user/update/details`, {
       userId,
       payload,
     });
-    console.log(response.data);
+    return response.data;
+  },
+);
+
+export const getAddressesThunk = createAsyncThunk(
+  "user/getAddresses",
+  async (_, { getState }) => {
+    const userId = getState().user.user._id || getState().user.user.user._id;
+    const response = await axios.get(
+      `${serverUrl}/api/user/addresses/${userId}`,
+    );
+    return response.data;
+  },
+);
+
+export const addAddressThunk = createAsyncThunk(
+  "user/addAddress",
+  async (payload, { getState }) => {
+    const userId = getState().user.user._id || getState().user.user.user._id;
+    const response = await axios.post(`${serverUrl}/api/user/address`, {
+      userId,
+      payload,
+    });
+    return response.data;
+  },
+);
+
+export const editAddressThunk = createAsyncThunk(
+  "user/editAddress",
+  async (payload, { getState }) => {
+    const userId = getState().user.user._id || getState().user.user.user._id;
+    const response = await axios.put(`${serverUrl}/api/user/address`, {
+      userId,
+      payload,
+    });
+    return response.data;
+  },
+);
+
+export const removeAddressThunk = createAsyncThunk(
+  "user/removeAddress",
+  async (addressObjId, { getState }) => {
+    const userId = getState().user.user._id || getState().user.user.user._id;
+    const response = await axios.delete(`${serverUrl}/api/user/address`, {
+      params: {
+        userId,
+        addressObjId,
+      },
+    });
     return response.data;
   },
 );
@@ -259,11 +306,54 @@ const userSlice = createSlice({
     });
     builder.addCase(updateUserPersonalDetails.fulfilled, (state, action) => {
       state.status = "userInfoUpdated";
-      console.log(action.payload.user);
       state.user = action.payload.user;
     });
     builder.addCase(updateUserPersonalDetails.rejected, (state, action) => {
       state.status = "failedToUpdateUserInfo";
+      state.error = action.payload;
+    });
+    builder.addCase(getAddressesThunk.pending, (state) => {
+      state.status = "fetchingAllAddresses";
+    });
+    builder.addCase(getAddressesThunk.fulfilled, (state, action) => {
+      state.status = "fetchedAllAddresses";
+      state.user.addresses = action.payload.addresses;
+    });
+    builder.addCase(getAddressesThunk.rejected, (state, action) => {
+      state.status = "failedToFetchAddresses";
+      state.error = action.payload;
+    });
+    builder.addCase(addAddressThunk.pending, (state) => {
+      state.status = "savingAddress";
+    });
+    builder.addCase(addAddressThunk.fulfilled, (state, action) => {
+      state.status = "addressSaved";
+      state.user.addresses = action.payload.addresses;
+    });
+    builder.addCase(addAddressThunk.rejected, (state, action) => {
+      state.status = "failedToSaveAddress";
+      state.error = action.payload;
+    });
+    builder.addCase(removeAddressThunk.pending, (state) => {
+      state.status = "removingAddress";
+    });
+    builder.addCase(removeAddressThunk.fulfilled, (state, action) => {
+      state.status = "addressRemoved";
+      state.user.addresses = action.payload.addresses;
+    });
+    builder.addCase(removeAddressThunk.rejected, (state, action) => {
+      state.status = "failedToRemoveAddress";
+      state.error = action.payload;
+    });
+    builder.addCase(editAddressThunk.pending, (state) => {
+      state.status = "updatingAddress";
+    });
+    builder.addCase(editAddressThunk.fulfilled, (state, action) => {
+      state.status = "addressUpdated";
+      state.user.addresses = action.payload.addresses;
+    });
+    builder.addCase(editAddressThunk.rejected, (state, action) => {
+      state.status = "failedToUpdateAddress";
       state.error = action.payload;
     });
   },
