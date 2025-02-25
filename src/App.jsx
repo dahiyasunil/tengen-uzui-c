@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
@@ -8,7 +9,8 @@ import Cart from "./components/user/Cart";
 import Profile from "./components/user/Profile";
 import UserDetails from "./components/user/UserDetails";
 import EditUserDetails from "./components/user/EditUserDetails";
-import { Toaster } from "react-hot-toast";
+import Addresses from "./components/user/Addresses";
+import AddOrEditAddress from "./components/user/AddOrEditAddress";
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/user/details" element={<UserDetails />} />
         <Route path="/user/edit" element={<EditUserDetails />} />
+        <Route path="/user/addresses" element={<Addresses />} />
+        <Route path="/user/address/:action" element={<AddOrEditAddress />} />
         <Route path="/productDetails/:productId" element={<ProductDetails />} />
       </Routes>
     </Router>
