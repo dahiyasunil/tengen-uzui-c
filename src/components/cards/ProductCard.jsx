@@ -7,7 +7,6 @@ import {
   StarIcon,
 } from "@heroicons/react/24/solid";
 import ShowPrice from "../ShowPrice";
-import { addToCart } from "../../utils/cartHandler";
 import Modal from "../Modal";
 import Login from "../Login";
 import { handleWishlisting } from "../../utils/wishlistHandler";
@@ -27,12 +26,6 @@ const ProductCard = ({ product }) => {
     e.preventDefault();
     e.stopPropagation();
     handleWishlisting(dispatch, loggedIn, setModal, setPendingAction, product);
-  };
-
-  const addToCartHandler = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    addToCart(dispatch, loggedIn, product);
   };
 
   const renderModal = () => {
@@ -90,14 +83,6 @@ const ProductCard = ({ product }) => {
                 <small>{product.title}</small>
               </p>
               <ShowPrice product={product} />
-            </div>
-            <div className="flex">
-              <button
-                className="mx-auto w-11/12 justify-center rounded-md bg-grey-300 py-1 text-white transition hover:bg-grey-500"
-                onClick={addToCartHandler}
-              >
-                <small>Add to cart</small>
-              </button>
             </div>
           </div>
         </Link>
