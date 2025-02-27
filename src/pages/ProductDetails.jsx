@@ -18,6 +18,8 @@ const ProductDetails = () => {
 
   const [modal, setModal] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [sizeSelectionValidation, setSizeSelectionValidation] = useState("");
 
   if (!product) {
     return (
@@ -38,7 +40,12 @@ const ProductDetails = () => {
   const addToCartHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    addToCart(dispatch, loggedIn, product);
+    if (!selectedSize) {
+      setSizeSelectionValidation("Please select a size");
+    } else {
+      setSizeSelectionValidation("");
+      addToCart(dispatch, loggedIn, product, selectedSize);
+    }
   };
 
   const renderModal = () => {
@@ -106,17 +113,28 @@ const ProductDetails = () => {
                 <p>SELECT SIZE</p>
                 <div className="mt-3 space-x-3">
                   {product.sizes.map((size) => (
-                    <button
-                      key={size._id}
-                      className="delay-50 rounded-full bg-beige-100 bg-opacity-40 px-3 transition duration-300 ease-in-out hover:scale-110 hover:bg-opacity-70"
-                    >
-                      {size.size}
-                    </button>
+                    <label htmlFor={size.size} key={size._id}>
+                      <input
+                        type="radio"
+                        id={size.size}
+                        name="size"
+                        value={size.size}
+                        onChange={(e) => setSelectedSize(e.target.value)}
+                        className="peer hidden"
+                      />
+                      <span className="delay-50 inline-block cursor-pointer rounded-full bg-grey-100/20 px-3 duration-300 ease-in-out hover:scale-110 hover:bg-gray-200 hover:bg-opacity-70 peer-checked:bg-beige-500 peer-checked:text-white">
+                        {size.size}
+                      </span>
+                    </label>
                   ))}
                 </div>
+                {sizeSelectionValidation && (
+                  <p className="text-red-500">{sizeSelectionValidation}</p>
+                )}
               </div>
               <div className="my-4 flex flex-col items-center justify-center space-y-4 md:flex-row md:justify-start md:space-x-6 md:space-y-0">
                 <button
+                  type="submit"
                   className="delay-50 flex w-2/3 items-center justify-center rounded bg-beige-100 py-2 transition duration-300 ease-in-out hover:scale-105 lg:w-1/3"
                   onClick={addToCartHandler}
                 >

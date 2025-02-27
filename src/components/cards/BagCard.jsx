@@ -35,13 +35,14 @@ const BagCard = ({ item }) => {
         updateItemQuantityAction({
           productObjId: item.item._id,
           quantity: e.target.value,
+          size: item.size,
         }),
       );
     }
   };
 
   const removeFromCartHandler = (e) => {
-    removeFromCart(dispatch, loggedIn, item.item);
+    removeFromCart(dispatch, loggedIn, item);
   };
 
   const wishlistHandler = (e) => {
@@ -92,6 +93,11 @@ const BagCard = ({ item }) => {
               <small>{item.item.title}</small>
             </p>
             <ShowPrice product={item.item} />
+            <div>
+              <p className="text-xs">
+                Size: <span className="font-medium">{item.size}</span>
+              </p>
+            </div>
             <div className="text-xs">
               <label htmlFor="">Quantity: </label>
               <select value={item.quantity} onChange={quantityHandler}>

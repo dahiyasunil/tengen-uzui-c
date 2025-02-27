@@ -190,23 +190,36 @@ const userSlice = createSlice({
     },
     addItemToCartAction: (state, action) => {
       const itemIndex = state.user.bag.findIndex(
-        (item) => item.item._id === action.payload._id,
+        (item) =>
+          item.item._id === action.payload.product._id &&
+          item.size === action.payload.size,
       );
       if (itemIndex != -1) {
-        const quantity = state.user.bag[itemIndex].quantity + 1;
-        state.user.bag[itemIndex] = { item: action.payload, quantity };
+        state.user.bag[itemIndex].quantity += 1;
       } else {
-        state.user.bag.push({ item: action.payload, quantity: 1 });
+        state.user.bag.push({
+          item: action.payload.product,
+          quantity: 1,
+          size: action.payload.size,
+        });
       }
     },
     removeItemFromCartAction: (state, action) => {
-      state.user.bag = state.user.bag.filter(
-        (item) => item.item._id != action.payload._id,
-      );
+      state.user.bag = state.user.bag.filter((item) => {
+        if (item.item._id !== action.payload.item._id) {
+          return true;
+        } else if (item.size !== action.payload.size) {
+          return true;
+        } else {
+          return false;
+        }
+      });
     },
     updateItemQuantityAction: (state, action) => {
       const itemIndex = state.user.bag.findIndex(
-        (item) => item.item._id === action.payload.productObjId,
+        (item) =>
+          item.item._id === action.payload.productObjId &&
+          item.size === action.payload.size,
       );
       state.user.bag[itemIndex].quantity = action.payload.quantity;
     },
