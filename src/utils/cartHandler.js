@@ -21,7 +21,12 @@ export const addToCart = async (dispatch, loggedIn, product, size) => {
 
 export const removeFromCart = async (dispatch, loggedIn, product) => {
   if (loggedIn) {
-    dispatch(removeItemFromCartThunk({ productObjId: product.item._id }));
+    dispatch(
+      removeItemFromCartThunk({
+        productObjId: product.item._id,
+        size: product.size,
+      }),
+    );
   } else {
     dispatch(removeItemFromCartAction(product));
   }

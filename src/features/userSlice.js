@@ -69,12 +69,10 @@ export const removeFromWishlist = createAsyncThunk(
 export const addItemToCartThunk = createAsyncThunk(
   "user/addItemToCart",
   async (itemData, { getState }) => {
-    const { productObjId, quantity } = itemData;
     const userId = getState().user.user._id || getState().user.user.user._id;
     const response = await axios.put(`${serverUrl}/api/user/cart/add`, {
       userId,
-      productObjId,
-      quantity,
+      itemData,
     });
     return response.data;
   },
@@ -83,11 +81,10 @@ export const addItemToCartThunk = createAsyncThunk(
 export const removeItemFromCartThunk = createAsyncThunk(
   "user/removeItemFromCart",
   async (itemData, { getState }) => {
-    const { productObjId } = itemData;
     const userId = getState().user.user._id || getState().user.user.user._id;
     const response = await axios.put(`${serverUrl}/api/user/cart/remove`, {
       userId,
-      productObjId,
+      itemData,
     });
     return response.data;
   },

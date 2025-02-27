@@ -56,7 +56,7 @@ const BagCard = ({ item }) => {
       item.item,
     );
     if (loggedIn) {
-      removeFromCart(dispatch, loggedIn, item.item);
+      removeFromCart(dispatch, loggedIn, item);
     }
   };
 
