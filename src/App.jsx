@@ -11,6 +11,7 @@ import UserDetails from "./components/user/UserDetails";
 import EditUserDetails from "./components/user/EditUserDetails";
 import Addresses from "./components/user/Addresses";
 import AddOrEditAddress from "./components/user/AddOrEditAddress";
+import OrderSummary from "./components/OrderSummary";
 
 function App() {
   return (
@@ -25,11 +26,13 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/cart/address" element={<Cart />} />
         <Route path="/user/details" element={<UserDetails />} />
         <Route path="/user/edit" element={<EditUserDetails />} />
         <Route path="/user/addresses" element={<Addresses />} />
         <Route path="/user/address/:action" element={<AddOrEditAddress />} />
         <Route path="/productDetails/:productId" element={<ProductDetails />} />
+        <Route path="/order" element={<OrderSummary />} />
       </Routes>
     </Router>
   );

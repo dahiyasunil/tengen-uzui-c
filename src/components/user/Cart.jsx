@@ -1,13 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCartItems } from "../../features/userSlice";
+import { useLocation, useNavigate } from "react-router-dom";
+import { clearCartThunk, getCartItems } from "../../features/userSlice";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import CartItems from "./CartItems";
 import CartSummary from "./CartSummary";
+import SelectAddress from "../SelectAddress";
 
 const Cart = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { bag } = useSelector((state) => state.user.user);
+  const [selectedAddress, setSelectedAddress] = useState("");
+  const [addressValidation, setAddressValidation] = useState("");
 
   useEffect(() => {
     if (bag.length > 0 && !checkCartItemsPopulated()) {
@@ -35,12 +41,47 @@ const Cart = () => {
     return typeof bag[0].item === "object";
   };
 
+  const placeOrdeHandler = (e) => {
+    if (location.pathname == "/cart") {
+      navigate("/cart/address");
+    }
+
+    if (location.pathname == "/cart/address") {
+      if (selectedAddress) {
+        setAddressValidation("");
+        navigate("/order");
+        dispatch(clearCartThunk());
+      } else {
+        setAddressValidation("Please select atleast one address to continue");
+      }
+    }
+  };
+
   return (
     checkCartItemsPopulated() && (
       <div className="container my-10 text-grey-500 md:my-20">
         <div className="grid md:grid-cols-12">
-          <CartItems bag={bag} />
-          <CartSummary bag={bag} />
+          {location.pathname == "/cart" ? (
+            <CartItems bag={bag} />
+          ) : (
+            <SelectAddress
+              addressValidation={addressValidation}
+              setSelectedAddress={setSelectedAddress}
+            />
+          )}
+          <section className="col-span-6">
+            <CartSummary bag={bag} />
+            <button
+              className="mt-8 w-4/6 rounded bg-beige-500 py-1 hover:bg-beige-700"
+              onClick={placeOrdeHandler}
+            >
+              <span className="text-white">
+                {location.pathname === "/cart/address"
+                  ? "PLACE ORDER"
+                  : "CONTINE"}
+              </span>
+            </button>
+          </section>
         </div>
       </div>
     )

@@ -90,6 +90,17 @@ export const removeItemFromCartThunk = createAsyncThunk(
   },
 );
 
+export const clearCartThunk = createAsyncThunk(
+  "user/clearCart",
+  async (_, { getState }) => {
+    const userId = getState().user.user._id || getState().user.user.user._id;
+    const response = await axios.put(`${serverUrl}/api/user/cart/clear`, {
+      userId,
+    });
+    return response.data;
+  },
+);
+
 export const getCartItems = createAsyncThunk(
   "user/getCartDetails",
   async (_, { getState }) => {
@@ -298,6 +309,17 @@ const userSlice = createSlice({
     });
     builder.addCase(removeItemFromCartThunk.rejected, (state, action) => {
       state.status = "failedToRemoveFromWCart";
+      state.error = action.payload;
+    });
+    builder.addCase(clearCartThunk.pending, (state) => {
+      state.status = "clearingCart";
+    });
+    builder.addCase(clearCartThunk.fulfilled, (state, action) => {
+      state.status = "cartCleared";
+      state.user.bag = action.payload.cart;
+    });
+    builder.addCase(clearCartThunk.rejected, (state, action) => {
+      state.status = "failedToClearCart";
       state.error = action.payload;
     });
     builder.addCase(updatedItemQuantityThunk.pending, (state) => {
