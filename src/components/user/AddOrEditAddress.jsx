@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import {
   addAddressThunk,
   editAddressThunk,
@@ -9,6 +9,7 @@ import {
 import toast from "react-hot-toast";
 
 const AddOrEditAddress = () => {
+  const navigate = useNavigate();
   const { action } = useParams();
   const dispatch = useDispatch();
   const addressData = useLocation().state;
@@ -235,8 +236,12 @@ const AddOrEditAddress = () => {
         </div>
       </form>
       <div>
-        {status === "addressSaved" && toast.success("Address saved")}
-        {status === "addressUpdated" && toast.success("Address updated")}
+        {status === "addressSaved" &&
+          toast.success("Address saved") &&
+          navigate("/user/addresses")}
+        {status === "addressUpdated" &&
+          toast.success("Address updated") &&
+          navigate("/user/addresses")}
       </div>
     </div>
   );
