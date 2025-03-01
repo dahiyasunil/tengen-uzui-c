@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getFinalPrice, isOnDiscount } from "../utils/getPrice";
 import { HeartIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import { addToCart } from "../utils/cartHandler";
 import Modal from "../components/Modal";
 import Login from "../components/Login";
@@ -148,9 +149,17 @@ const ProductDetails = () => {
                   onClick={wishlistHandler}
                 >
                   <span>
-                    <HeartIcon className="mr-2 w-4" />
+                    {product?.isWishlisted ? (
+                      <span>
+                        <HeartIconSolid className="mr-2 w-4 text-red-500" />
+                      </span>
+                    ) : (
+                      <span>
+                        <HeartIcon className="mr-2 w-4" />
+                      </span>
+                    )}
                   </span>
-                  WISHLIST
+                  {product?.isWishlisted ? "WISHLISTED" : "WISHLIST"}
                 </button>
               </div>
               <hr />
