@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../features/userSlice";
 import { useNavigate } from "react-router-dom";
+import { fetchProducts } from "../features/productSlice";
 
 const Login = ({ closeModal, route }) => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Login = ({ closeModal, route }) => {
     if (loggedIn) {
       closeModal();
       navigate(route);
+      dispatch(fetchProducts());
     }
   }, [loggedIn, closeModal]);
 
