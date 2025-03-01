@@ -12,6 +12,7 @@ import EditUserDetails from "./components/user/EditUserDetails";
 import Addresses from "./components/user/Addresses";
 import AddOrEditAddress from "./components/user/AddOrEditAddress";
 import OrderSummary from "./components/OrderSummary";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 
 function App() {
   return (
@@ -23,16 +24,72 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/wishlist" element={<Wishlist />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoutes>
+              <Profile />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/wishlist"
+          element={
+            <ProtectedRoutes>
+              <Wishlist />
+            </ProtectedRoutes>
+          }
+        />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/cart/address" element={<Cart />} />
-        <Route path="/user/details" element={<UserDetails />} />
-        <Route path="/user/edit" element={<EditUserDetails />} />
-        <Route path="/user/addresses" element={<Addresses />} />
-        <Route path="/user/address/:action" element={<AddOrEditAddress />} />
+        <Route
+          path="/cart/address"
+          element={
+            <ProtectedRoutes>
+              <Cart />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/user/details"
+          element={
+            <ProtectedRoutes>
+              <UserDetails />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/user/edit"
+          element={
+            <ProtectedRoutes>
+              <EditUserDetails />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/user/addresses"
+          element={
+            <ProtectedRoutes>
+              <Addresses />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/user/address/:action"
+          element={
+            <ProtectedRoutes>
+              <AddOrEditAddress />
+            </ProtectedRoutes>
+          }
+        />
         <Route path="/productDetails/:productId" element={<ProductDetails />} />
-        <Route path="/order" element={<OrderSummary />} />
+        <Route
+          path="/order"
+          element={
+            <ProtectedRoutes>
+              <OrderSummary />
+            </ProtectedRoutes>
+          }
+        />
       </Routes>
     </Router>
   );
