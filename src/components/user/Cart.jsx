@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { clearCartThunk, getCartItems } from "../../features/userSlice";
+import { getCartItems, resetStatus } from "../../features/userSlice";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import CartItems from "./CartItems";
 import CartSummary from "./CartSummary";
@@ -19,6 +19,7 @@ const Cart = () => {
     if (bag.length > 0 && !checkCartItemsPopulated()) {
       dispatch(getCartItems());
     }
+    return () => dispatch(resetStatus());
   }, [bag]);
 
   if (bag.length === 0) {
@@ -49,8 +50,7 @@ const Cart = () => {
     if (location.pathname == "/cart/address") {
       if (selectedAddress) {
         setAddressValidation("");
-        navigate("/order");
-        dispatch(clearCartThunk());
+        navigate("/order", { state: selectedAddress });
       } else {
         setAddressValidation("Please select atleast one address to continue");
       }

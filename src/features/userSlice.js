@@ -189,6 +189,18 @@ export const removeAddressThunk = createAsyncThunk(
   },
 );
 
+export const placeOrder = createAsyncThunk(
+  "user/processOrder",
+  async (deliveryAddress, { getState }) => {
+    const userId = getState().user.user._id || getState().user.user.user._id;
+    const response = await axios.post(`${serverUrl}/api/user/placeOrder`, {
+      userId,
+      deliveryAddress,
+    });
+    return response.data;
+  },
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -386,6 +398,17 @@ const userSlice = createSlice({
     });
     builder.addCase(editAddressThunk.rejected, (state, action) => {
       state.status = "failedToUpdateAddress";
+      state.error = action.payload;
+    });
+    builder.addCase(placeOrder.pending, (state) => {
+      state.status = "placingOrder";
+    });
+    builder.addCase(placeOrder.fulfilled, (state, action) => {
+      state.status = "orderPlacedSuccessfully";
+      state.user.orders = action.payload.orders;
+    });
+    builder.addCase(placeOrder.rejected, (state, action) => {
+      state.status = "failedToplaceOrder";
       state.error = action.payload;
     });
   },
