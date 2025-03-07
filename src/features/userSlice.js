@@ -20,6 +20,10 @@ const initialState = {
   error: null,
 };
 
+const getUserId = (state) => {
+  return state().user.user._id || getState().user.user.user._id;
+};
+
 export const loginUser = createAsyncThunk(
   "user/login",
   async (mobileNumber) => {
@@ -197,6 +201,19 @@ export const placeOrder = createAsyncThunk(
       userId,
       deliveryAddress,
     });
+    return response.data;
+  },
+);
+
+export const getOrders = createAsyncThunk(
+  "user/orders",
+  async (_, { getState }) => {
+    const response = await axios.get(`${serverUrl}/api/user/orders`, {
+      params: {
+        userId: getUserId(getState),
+      },
+    });
+
     return response.data;
   },
 );
@@ -409,6 +426,17 @@ const userSlice = createSlice({
     });
     builder.addCase(placeOrder.rejected, (state, action) => {
       state.status = "failedToplaceOrder";
+      state.error = action.payload;
+    });
+    builder.addCase(getOrders.pending, (state) => {
+      state.status = "fetchingOrders";
+    });
+    builder.addCase(getOrders.fulfilled, (state, action) => {
+      state.status = "ordersFetched";
+      state.user.orders = action.payload.orders;
+    });
+    builder.addCase(getOrders.rejected, (state, action) => {
+      state.status = "failedToFetchOrders";
       state.error = action.payload;
     });
   },
