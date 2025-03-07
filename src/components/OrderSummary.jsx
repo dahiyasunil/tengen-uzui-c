@@ -23,9 +23,9 @@ const OrderSummary = () => {
     if (status === "orderPlacedSuccessfully") {
       setTimeout(() => {
         dispatch(clearCartThunk());
-        navigate("/profile");
+        navigate("/user/orders");
         dispatch(resetStatus());
-      }, 5000);
+      }, 3000);
     }
   }, [status]);
 
