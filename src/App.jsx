@@ -13,6 +13,8 @@ import Addresses from "./components/user/Addresses";
 import AddOrEditAddress from "./components/user/AddOrEditAddress";
 import OrderSummary from "./components/OrderSummary";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import Orders from "./components/user/Orders";
+import OrderDetails from "./components/user/OrderDetails";
 
 function App() {
   return (
@@ -70,6 +72,22 @@ function App() {
           element={
             <ProtectedRoutes>
               <Addresses />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/user/orders"
+          element={
+            <ProtectedRoutes>
+              <Orders />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/user/orders/details"
+          element={
+            <ProtectedRoutes>
+              <OrderDetails />
             </ProtectedRoutes>
           }
         />
