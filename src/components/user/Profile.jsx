@@ -1,4 +1,8 @@
-import { UserIcon, MapPinIcon } from "@heroicons/react/24/solid";
+import {
+  UserIcon,
+  MapPinIcon,
+  ArchiveBoxIcon,
+} from "@heroicons/react/24/solid";
 import { NavLink } from "react-router-dom";
 
 const Profile = () => {
@@ -24,6 +28,16 @@ const Profile = () => {
             <p className="ml-3 mt-1 flex flex-col font-medium text-grey-500">
               <span>Address</span>
               <span className="text-xs">Addresses for orders</span>
+            </p>
+          </NavLink>
+          <NavLink
+            className="flex rounded-md border-2 px-5 py-2"
+            to="/user/orders"
+          >
+            <ArchiveBoxIcon className="size-10 text-beige-500" />
+            <p className="ml-3 mt-1 flex flex-col font-medium text-grey-500">
+              <span>Orders</span>
+              <span className="text-xs">Previous order details</span>
             </p>
           </NavLink>
         </div>
