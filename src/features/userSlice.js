@@ -74,11 +74,19 @@ export const addItemToCartThunk = createAsyncThunk(
   "user/addItemToCart",
   async (itemData, { getState }) => {
     const userId = getState().user.user._id || getState().user.user.user._id;
-    const response = await axios.put(`${serverUrl}/api/user/cart/add`, {
-      userId,
-      itemData,
-    });
-    return response.data;
+
+    const existingItem = getState().user.user.bag.findIndex(
+      (item) =>
+        item.item === itemData.productObjId && item.size === itemData.size,
+    );
+    if (existingItem === -1) {
+      const response = await axios.put(`${serverUrl}/api/user/cart/add`, {
+        userId,
+        itemData,
+      });
+      return response.data;
+    }
+    return null;
   },
 );
 
@@ -311,8 +319,10 @@ const userSlice = createSlice({
       state.status = "addingItemToCart";
     });
     builder.addCase(addItemToCartThunk.fulfilled, (state, action) => {
-      state.status = "addedItemToCart";
-      state.user.bag = action.payload.cart;
+      if (action.payload != null) {
+        state.status = "addedItemToCart";
+        state.user.bag = action.payload.cart;
+      }
     });
     builder.addCase(addItemToCartThunk.rejected, (state, action) => {
       state.status = "failedToAddToCart";
