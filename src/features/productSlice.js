@@ -1,28 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { act } from "react";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
-
-export const fetchProducts = createAsyncThunk(
-  "products/fetchProducts",
-  async (keywords, { getState }) => {
-    try {
-      const { user } = getState().user;
-      const userMobileNo = user.mobileNumber;
-      const response = await axios.get(`${serverUrl}/api/products/`, {
-        params: { search: keywords },
-        headers: {
-          "X-Mobile-No": userMobileNo,
-        },
-      });
-      return response.data;
-    } catch (err) {
-      console.error("Error fetching all products:", err);
-      throw err;
-    }
-  },
-);
 
 export const filters = {
   category: [],
@@ -47,11 +26,52 @@ const isAnyFilterSet = ({ category, price, rating, sortBy }) => {
 
 const initialState = {
   products: [],
+  similarProducts: [],
   status: "idle",
   error: null,
   isFilter: false,
   filters,
 };
+
+export const fetchProducts = createAsyncThunk(
+  "products/fetchProducts",
+  async (keywords, { getState }) => {
+    try {
+      const { user } = getState().user;
+      const userMobileNo = user.mobileNumber;
+      const response = await axios.get(`${serverUrl}/api/products/`, {
+        params: { search: keywords },
+        headers: {
+          "X-Mobile-No": userMobileNo,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      console.error("Error fetching all products:", err);
+      throw err;
+    }
+  },
+);
+
+export const fetchSimilarProducts = createAsyncThunk(
+  "products/fetchSimilarProducts",
+  async (keywords, { getState }) => {
+    try {
+      const { user } = getState().user;
+      const userMobileNo = user.mobileNumber;
+      const response = await axios.get(`${serverUrl}/api/products/`, {
+        params: { search: keywords },
+        headers: {
+          "X-Mobile-No": userMobileNo,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      console.error("Error fetching similar products:", err);
+      throw err;
+    }
+  },
+);
 
 const productSlice = createSlice({
   name: "products",
@@ -83,6 +103,17 @@ const productSlice = createSlice({
       state.products = action.payload;
     });
     builder.addCase(fetchProducts.rejected, (state, action) => {
+      state.status = "error";
+      state.error = action.payload;
+    });
+    builder.addCase(fetchSimilarProducts.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(fetchSimilarProducts.fulfilled, (state, action) => {
+      state.status = "success";
+      state.similarProducts = action.payload;
+    });
+    builder.addCase(fetchSimilarProducts.rejected, (state, action) => {
       state.status = "error";
       state.error = action.payload;
     });
