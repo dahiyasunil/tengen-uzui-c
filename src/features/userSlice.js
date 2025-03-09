@@ -21,208 +21,296 @@ const initialState = {
 };
 
 const getUserId = (state) => {
-  return state().user.user._id || getState().user.user.user._id;
+  const userId = state().user.user?._id || state().user.user?.user?._id;
+  if (!userId) {
+    throw new Error(
+      "User ID is missing in the state. Please ensure the user is logged in.",
+    );
+  }
+  return userId;
 };
 
 export const loginUser = createAsyncThunk(
   "user/login",
   async (mobileNumber) => {
-    const response = await axios.get(
-      `${serverUrl}/api/user/login/${mobileNumber}`,
-    );
-    return response.data;
+    try {
+      const response = await axios.get(
+        `${serverUrl}/api/user/login/${mobileNumber}`,
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error login user:", err);
+      throw err;
+    }
   },
 );
 
 export const getWishlistItems = createAsyncThunk(
   "user/getWishlistItems",
   async (_, { getState }) => {
-    const userId = getState().user.user._id || getState().user.user.user._id;
-
-    const response = await axios.get(
-      `${serverUrl}/api/user/wishlist/details/${userId}`,
-    );
-    return response.data;
+    try {
+      const userId = getUserId(getState);
+      const response = await axios.get(
+        `${serverUrl}/api/user/wishlist/details/${userId}`,
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Error fetching wishlist details:", err);
+      throw err;
+    }
   },
 );
 
 export const addToWishlist = createAsyncThunk(
   "user/addToWishlist",
   async (productObjId, { getState }) => {
-    const userId = getState().user.user._id || getState().user.user.user._id;
-    const response = await axios.put(`${serverUrl}/api/user/wishlist/add`, {
-      userId,
-      productObjId,
-    });
-    return response.data;
+    try {
+      const userId = getUserId(getState);
+      const response = await axios.put(`${serverUrl}/api/user/wishlist/add`, {
+        userId,
+        productObjId,
+      });
+      return response.data;
+    } catch (err) {
+      console.error("Error adding item to wishlist:", err);
+      throw err;
+    }
   },
 );
 
 export const removeFromWishlist = createAsyncThunk(
   "user/removeFromWishlist",
   async (productObjId, { getState }) => {
-    const userId = getState().user.user._id || getState().user.user.user._id;
-    const response = await axios.put(`${serverUrl}/api/user/wishlist/remove`, {
-      userId,
-      productObjId,
-    });
-    return response.data;
+    try {
+      const userId = getUserId(getState);
+      const response = await axios.put(
+        `${serverUrl}/api/user/wishlist/remove`,
+        {
+          userId,
+          productObjId,
+        },
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Error removing item from wishlist:", err);
+      throw err;
+    }
   },
 );
 
 export const addItemToCartThunk = createAsyncThunk(
   "user/addItemToCart",
   async (itemData, { getState }) => {
-    const userId = getState().user.user._id || getState().user.user.user._id;
+    try {
+      const userId = getUserId(getState);
 
-    const existingItem = getState().user.user.bag.findIndex(
-      (item) =>
-        item.item === itemData.productObjId && item.size === itemData.size,
-    );
-    if (existingItem === -1) {
-      const response = await axios.put(`${serverUrl}/api/user/cart/add`, {
-        userId,
-        itemData,
-      });
-      return response.data;
+      const existingItem = getState().user.user.bag.findIndex(
+        (item) =>
+          item.item === itemData.productObjId && item.size === itemData.size,
+      );
+      if (existingItem === -1) {
+        const response = await axios.put(`${serverUrl}/api/user/cart/add`, {
+          userId,
+          itemData,
+        });
+        return response.data;
+      }
+      return null;
+    } catch (err) {
+      console.error("Error adding item to cart:", err);
+      throw err;
     }
-    return null;
   },
 );
 
 export const removeItemFromCartThunk = createAsyncThunk(
   "user/removeItemFromCart",
   async (itemData, { getState }) => {
-    const userId = getState().user.user._id || getState().user.user.user._id;
-    const response = await axios.put(`${serverUrl}/api/user/cart/remove`, {
-      userId,
-      itemData,
-    });
-    return response.data;
+    try {
+      const userId = getUserId(getState);
+      const response = await axios.put(`${serverUrl}/api/user/cart/remove`, {
+        userId,
+        itemData,
+      });
+      return response.data;
+    } catch (err) {
+      console.error("Error removing item from cart:", err);
+      throw err;
+    }
   },
 );
 
 export const clearCartThunk = createAsyncThunk(
   "user/clearCart",
   async (_, { getState }) => {
-    const userId = getState().user.user._id || getState().user.user.user._id;
-    const response = await axios.put(`${serverUrl}/api/user/cart/clear`, {
-      userId,
-    });
-    return response.data;
+    try {
+      const userId = getUserId(getState);
+      const response = await axios.put(`${serverUrl}/api/user/cart/clear`, {
+        userId,
+      });
+      return response.data;
+    } catch (err) {
+      console.error("Error clearing items from cart:", err);
+      throw err;
+    }
   },
 );
 
 export const getCartItems = createAsyncThunk(
   "user/getCartDetails",
   async (_, { getState }) => {
-    const userId = getState().user.user._id || getState().user.user.user._id;
-    const response = await axios.get(
-      `${serverUrl}/api/user/cart/details/${userId}`,
-    );
-    return response.data;
+    try {
+      const userId = getUserId(getState);
+      const response = await axios.get(
+        `${serverUrl}/api/user/cart/details/${userId}`,
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Error fetching cart items:", err);
+      throw err;
+    }
   },
 );
 
 export const updatedItemQuantityThunk = createAsyncThunk(
   "user/updatedItemQuanity",
   async ({ productObjId, quantity }, { getState }) => {
-    const userId = getState().user.user._id || getState().user.user.user._id;
-    const response = await axios.put(
-      `${serverUrl}/api/user/cart/item/quantity`,
-      {
-        userId,
-        productObjId,
-        quantity,
-      },
-    );
-    return response.data;
+    try {
+      const userId = getUserId(getState);
+      const response = await axios.put(
+        `${serverUrl}/api/user/cart/item/quantity`,
+        {
+          userId,
+          productObjId,
+          quantity,
+        },
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Error updating item quantity:", err);
+      throw err;
+    }
   },
 );
 
 export const updateUserPersonalDetails = createAsyncThunk(
   "user/updatePersonalInfo",
   async (payload, { getState }) => {
-    const userId = getState().user.user._id || getState().user.user.user._id;
-    const response = await axios.put(`${serverUrl}/api/user/update/details`, {
-      userId,
-      payload,
-    });
-    return response.data;
+    try {
+      const userId = getUserId(getState);
+      const response = await axios.put(`${serverUrl}/api/user/update/details`, {
+        userId,
+        payload,
+      });
+      return response.data;
+    } catch (err) {
+      console.error("Error updating user personal details:", err);
+      throw err;
+    }
   },
 );
 
 export const getAddressesThunk = createAsyncThunk(
   "user/getAddresses",
   async (_, { getState }) => {
-    const userId = getState().user.user._id || getState().user.user.user._id;
-    const response = await axios.get(
-      `${serverUrl}/api/user/addresses/${userId}`,
-    );
-    return response.data;
+    try {
+      const userId = getUserId(getState);
+      const response = await axios.get(
+        `${serverUrl}/api/user/addresses/${userId}`,
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Error fetching user addresses:", err);
+      throw err;
+    }
   },
 );
 
 export const addAddressThunk = createAsyncThunk(
   "user/addAddress",
   async (payload, { getState }) => {
-    const userId = getState().user.user._id || getState().user.user.user._id;
-    const response = await axios.post(`${serverUrl}/api/user/address`, {
-      userId,
-      payload,
-    });
-    return response.data;
+    try {
+      const userId = getUserId(getState);
+      const response = await axios.post(`${serverUrl}/api/user/address`, {
+        userId,
+        payload,
+      });
+      return response.data;
+    } catch (err) {
+      console.error("Error adding user address:", err);
+      throw err;
+    }
   },
 );
 
 export const editAddressThunk = createAsyncThunk(
   "user/editAddress",
   async (payload, { getState }) => {
-    const userId = getState().user.user._id || getState().user.user.user._id;
-    const response = await axios.put(`${serverUrl}/api/user/address`, {
-      userId,
-      payload,
-    });
-    return response.data;
+    try {
+      const userId = getUserId(getState);
+      const response = await axios.put(`${serverUrl}/api/user/address`, {
+        userId,
+        payload,
+      });
+      return response.data;
+    } catch (err) {
+      console.error("Error editing user address:", err);
+      throw err;
+    }
   },
 );
 
 export const removeAddressThunk = createAsyncThunk(
   "user/removeAddress",
   async (addressObjId, { getState }) => {
-    const userId = getState().user.user._id || getState().user.user.user._id;
-    const response = await axios.delete(`${serverUrl}/api/user/address`, {
-      params: {
-        userId,
-        addressObjId,
-      },
-    });
-    return response.data;
+    try {
+      const userId = getUserId(getState);
+      const response = await axios.delete(`${serverUrl}/api/user/address`, {
+        params: {
+          userId,
+          addressObjId,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      console.error("Error removing user address:", err);
+      throw err;
+    }
   },
 );
 
 export const placeOrder = createAsyncThunk(
   "user/processOrder",
   async (deliveryAddress, { getState }) => {
-    const userId = getState().user.user._id || getState().user.user.user._id;
-    const response = await axios.post(`${serverUrl}/api/user/placeOrder`, {
-      userId,
-      deliveryAddress,
-    });
-    return response.data;
+    try {
+      const userId = getUserId(getState);
+      const response = await axios.post(`${serverUrl}/api/user/placeOrder`, {
+        userId,
+        deliveryAddress,
+      });
+      return response.data;
+    } catch (err) {
+      console.error("Error while placing user order:", err);
+      throw err;
+    }
   },
 );
 
 export const getOrders = createAsyncThunk(
   "user/orders",
   async (_, { getState }) => {
-    const response = await axios.get(`${serverUrl}/api/user/orders`, {
-      params: {
-        userId: getUserId(getState),
-      },
-    });
-
-    return response.data;
+    try {
+      const userId = getUserId(getState);
+      const response = await axios.get(`${serverUrl}/api/user/orders`, {
+        params: {
+          userId,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      console.error("Error fetching order details:", err);
+      throw err;
+    }
   },
 );
 
