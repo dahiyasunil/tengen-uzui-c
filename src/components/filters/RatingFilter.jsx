@@ -81,7 +81,7 @@ const RatingFilter = () => {
             id="1star"
             name="rating"
             value={1}
-            checked={rating == 2}
+            checked={rating == 1}
             className="mr-1 accent-beige-500"
             onChange={ratingHandler}
           />
