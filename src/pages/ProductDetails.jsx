@@ -8,6 +8,8 @@ import { addToCart } from "../utils/cartHandler";
 import Modal from "../components/Modal";
 import Login from "../components/Login";
 import { handleWishlisting } from "../utils/wishlistHandler";
+import { fetchSimilarProducts } from "../features/productSlice";
+import ProductCard from "../components/cards/ProductCard";
 
 const ProductDetails = () => {
   const { productId } = useParams();
@@ -16,6 +18,7 @@ const ProductDetails = () => {
   const product = useSelector((state) =>
     state.product.products.find((p) => p._id == productId),
   );
+  const { similarProducts } = useSelector((state) => state.product);
 
   const [modal, setModal] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
@@ -65,6 +68,10 @@ const ProductDetails = () => {
       setPendingAction(null);
     }
   }, [loggedIn, pendingAction]);
+
+  useEffect(() => {
+    dispatch(fetchSimilarProducts(product.keywords.join(" ")));
+  }, []);
 
   return (
     <div className="container my-8 lg:my-16">
@@ -203,7 +210,16 @@ const ProductDetails = () => {
         </div>
         <div className="my-10">
           <hr />
-          <p className="mt-3">Similar Products</p>
+          {similarProducts && (
+            <div>
+              <p className="mt-3">Similar Products</p>
+              <div className="grid grid-cols-2 gap-12 sm:grid-cols-4 lg:grid-cols-6">
+                {similarProducts.map((sp) => (
+                  <ProductCard product={sp} key={sp._id} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
       {modal && renderModal()}
