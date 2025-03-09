@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   resetStatus,
   updateUserPersonalDetails,
 } from "../../features/userSlice";
-
 import toast from "react-hot-toast";
 
 const EditUserDetails = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { status } = useSelector((state) => state.user);
 
@@ -89,7 +89,9 @@ const EditUserDetails = () => {
       </div>
       <div className="w-1/3 text-white">
         {status === "updatingUserInfo" && toast("Saving data...")}
-        {status === "userInfoUpdated" && toast.success("Details updated!")}
+        {status === "userInfoUpdated" &&
+          toast.success("Details updated!") &&
+          navigate("/user/details")}
         {status === "failedToUpdateUserInfo" &&
           toast.error("Failed to Update. Please try again later!")}
       </div>
