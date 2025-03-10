@@ -7,7 +7,7 @@ import { fetchProducts } from "../features/productSlice";
 const Login = ({ closeModal, route }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [mobileNo, setMobileNumber] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
   const [error, setError] = useState(null);
   const { loggedIn } = useSelector((state) => state.user);
 
@@ -16,14 +16,16 @@ const Login = ({ closeModal, route }) => {
       closeModal();
       navigate(route);
       dispatch(fetchProducts());
+      localStorage.setItem("ulub", "[]");
     }
   }, [loggedIn, closeModal]);
 
   const continueHandler = (e) => {
     e.preventDefault();
-    if (Number(mobileNo)) {
+    if (Number(mobileNumber)) {
       setError(null);
-      dispatch(loginUser(mobileNo));
+      const userBagCache = localStorage.getItem("ulub") || "[]";
+      dispatch(loginUser({ mobileNumber, bag: userBagCache }));
     } else {
       setError("Please enter a valid mobile number (10 digits)");
     }

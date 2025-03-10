@@ -6,14 +6,31 @@ import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import CartItems from "./CartItems";
 import CartSummary from "./CartSummary";
 import SelectAddress from "../SelectAddress";
+import Modal from "../Modal";
+import Login from "../Login";
 
 const Cart = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { bag } = useSelector((state) => state.user.user);
+  const {
+    loggedIn,
+    user: { bag },
+  } = useSelector((state) => state.user);
+  // const { bag } = useSelector((state) => state.user.user);
   const [selectedAddress, setSelectedAddress] = useState("");
   const [addressValidation, setAddressValidation] = useState("");
+  const [modal, setModal] = useState(false);
+
+  const renderModal = () => {
+    return (
+      <Modal
+        openModal={modal}
+        closeModal={() => setModal(false)}
+        ChildComponent={Login}
+      ></Modal>
+    );
+  };
 
   useEffect(() => {
     if (bag.length > 0 && !checkCartItemsPopulated()) {
@@ -43,16 +60,22 @@ const Cart = () => {
   };
 
   const placeOrdeHandler = (e) => {
-    if (location.pathname == "/cart") {
-      navigate("/cart/address");
-    }
+    if (loggedIn) {
+      if (location.pathname == "/cart") {
+        navigate("/cart/address");
+      }
 
-    if (location.pathname == "/cart/address") {
-      if (selectedAddress) {
-        setAddressValidation("");
-        navigate("/order", { state: selectedAddress });
-      } else {
-        setAddressValidation("Please select atleast one address to continue");
+      if (location.pathname == "/cart/address") {
+        if (selectedAddress) {
+          setAddressValidation("");
+          navigate("/order", { state: selectedAddress });
+        } else {
+          setAddressValidation("Please select atleast one address to continue");
+        }
+      }
+    } else {
+      if (location.pathname == "/cart") {
+        setModal(true);
       }
     }
   };
@@ -83,6 +106,7 @@ const Cart = () => {
             </button>
           </section>
         </div>
+        {modal && renderModal()}
       </div>
     )
   );

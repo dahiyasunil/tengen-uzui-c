@@ -32,10 +32,16 @@ const getUserId = (state) => {
 
 export const loginUser = createAsyncThunk(
   "user/login",
-  async (mobileNumber) => {
+  async ({ mobileNumber, bag }) => {
+    bag = JSON.parse(bag);
     try {
       const response = await axios.get(
         `${serverUrl}/api/user/login/${mobileNumber}`,
+        {
+          params: {
+            bag,
+          },
+        },
       );
       return response.data;
     } catch (error) {
@@ -327,14 +333,13 @@ const userSlice = createSlice({
           item.item._id === action.payload.product._id &&
           item.size === action.payload.size,
       );
-      if (itemIndex != -1) {
-        state.user.bag[itemIndex].quantity += 1;
-      } else {
+      if (itemIndex === -1) {
         state.user.bag.push({
           item: action.payload.product,
           quantity: 1,
           size: action.payload.size,
         });
+        localStorage.setItem("ulub", JSON.stringify(state.user.bag));
       }
     },
     removeItemFromCartAction: (state, action) => {
@@ -347,6 +352,7 @@ const userSlice = createSlice({
           return false;
         }
       });
+      localStorage.setItem("ulub", JSON.stringify(state.user.bag));
     },
     updateItemQuantityAction: (state, action) => {
       const itemIndex = state.user.bag.findIndex(
@@ -355,6 +361,7 @@ const userSlice = createSlice({
           item.size === action.payload.size,
       );
       state.user.bag[itemIndex].quantity = action.payload.quantity;
+      localStorage.setItem("ulub", JSON.stringify(state.user.bag));
     },
   },
   extraReducers: (builder) => {
