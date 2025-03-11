@@ -363,6 +363,10 @@ const userSlice = createSlice({
       state.user.bag[itemIndex].quantity = action.payload.quantity;
       localStorage.setItem("ulub", JSON.stringify(state.user.bag));
     },
+    updateUserLocalBagAction: (state) => {
+      const localBag = JSON.parse(localStorage.getItem("ulub") || "[]");
+      state.user.bag = localBag;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(loginUser.pending, (state) => {
@@ -553,5 +557,6 @@ export const {
   addItemToCartAction,
   removeItemFromCartAction,
   updateItemQuantityAction,
+  updateUserLocalBagAction,
 } = userSlice.actions;
 export default userSlice.reducer;
