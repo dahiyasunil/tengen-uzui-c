@@ -15,11 +15,13 @@ const ProfileMenu = ({ loginDialogHandler }) => {
   };
 
   return (
-    <div className="flex flex-col">
-      <button onClick={profileHandler}>
-        <UserCircleIcon className="size-5 justify-self-center text-grey-300 transition duration-200 hover:text-grey-700" />
+    <div>
+      <button onClick={profileHandler} className="flex flex-col justify-center">
+        <span>
+          <UserCircleIcon className="size-5 justify-self-center text-grey-300 transition duration-200 hover:text-grey-700" />
+        </span>
+        <span className="text-xs">Profile</span>
       </button>
-      <span className="text-xs">Profile</span>
     </div>
   );
 };

@@ -18,10 +18,10 @@ const WishlistMenu = ({ loginDialogHandler }) => {
   };
 
   return (
-    <div className="flex flex-col">
-      <button onClick={wishlistHandler} className="relative">
+    <div>
+      <div className="relative">
         {wishlist && wishlist.length > 0 && (
-          <span className="absolute bottom-3 left-6 flex size-5">
+          <span className="absolute -top-3 left-6 flex size-5">
             <span className="absolute inline-flex h-full w-full rounded-full bg-red-600 bg-opacity-90">
               <small className="absolute bottom-0.5 left-1 text-xs text-white">
                 {wishlist.length}
@@ -29,9 +29,16 @@ const WishlistMenu = ({ loginDialogHandler }) => {
             </span>
           </span>
         )}
-        <HeartIcon className="size-5 justify-self-center text-grey-300 transition duration-200 hover:text-grey-700" />
+      </div>
+      <button
+        onClick={wishlistHandler}
+        className="flex flex-col justify-center"
+      >
+        <span>
+          <HeartIcon className="size-5 justify-self-center text-grey-300 transition duration-200 hover:text-grey-700" />
+        </span>
+        <span className="text-xs">Wishlist</span>
       </button>
-      <span className="text-xs">Wishlist</span>
     </div>
   );
 };
