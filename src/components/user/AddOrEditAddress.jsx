@@ -12,7 +12,9 @@ const AddOrEditAddress = () => {
   const navigate = useNavigate();
   const { action } = useParams();
   const dispatch = useDispatch();
-  const addressData = useLocation().state;
+  const state = useLocation().state;
+  const addressData = state.addressData ?? null;
+  const from = state.from ?? undefined;
   const { status } = useSelector((state) => state.user);
 
   const [mobileValidaitionMsg, setMobileValidationMsg] = useState("");
@@ -65,6 +67,22 @@ const AddOrEditAddress = () => {
   const fieldChangeHandler = (e) => {
     const { name, value } = e.target;
     setAddress((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "mobile" && value.length === 10) {
+      if (!Number(value)) {
+        setMobileValidationMsg("Please enter valid 10 digit mobile number!");
+      } else {
+        setMobileValidationMsg("");
+      }
+    }
+
+    if (name === "pincode" && value.length === 6) {
+      if (!Number(value)) {
+        setPincodeValidationMsg("Please enter valid 6 digit pincode number!");
+      } else {
+        setPincodeValidationMsg("");
+      }
+    }
   };
 
   const addressHandler = (e) => {
@@ -238,7 +256,7 @@ const AddOrEditAddress = () => {
       <div>
         {status === "addressSaved" &&
           toast.success("Address saved") &&
-          navigate("/user/addresses")}
+          (from ? navigate("/cart/address") : navigate("/user/addresses"))}
         {status === "addressUpdated" &&
           toast.success("Address updated") &&
           navigate("/user/addresses")}

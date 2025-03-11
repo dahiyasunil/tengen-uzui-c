@@ -73,7 +73,7 @@ const Addresses = () => {
                 <Link
                   className="pr-6 text-blue-500"
                   to="/user/address/edit"
-                  state={address}
+                  state={{ addressData: address }}
                 >
                   Edit
                 </Link>

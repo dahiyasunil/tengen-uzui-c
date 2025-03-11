@@ -31,7 +31,9 @@ const SelectAddress = ({ addressValidation, setSelectedAddress }) => {
         <p className="text-xl font-medium">Select Delivery Address</p>
         <button
           className="rounded bg-beige-500 px-4 py-1 text-white hover:bg-beige-700"
-          onClick={() => navigate("/user/address/add")}
+          onClick={() =>
+            navigate("/user/address/add", { state: { from: "/cart/address" } })
+          }
         >
           Add New Address
         </button>
