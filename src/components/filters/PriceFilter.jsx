@@ -7,20 +7,16 @@ const PriceFilter = () => {
   const { price } = useSelector((state) => state.product.filters);
   const MIN_PRICE = 100;
   const MAX_PRICE = 5000;
-  const [priceValue, setPriceValue] = useState(MIN_PRICE);
+  const [priceValue, setPriceValue] = useState(MAX_PRICE);
 
   const priceHandler = (e) => {
     const priceVal = e.target.value;
-    if (priceVal > MIN_PRICE) {
-      dispatch(updateFilters({ price: priceVal }));
-    } else {
-      dispatch(updateFilters({ price: null }));
-    }
+    dispatch(updateFilters({ price: priceVal }));
   };
 
   useEffect(() => {
     if (price === null) {
-      setPriceValue(MIN_PRICE);
+      setPriceValue(MAX_PRICE);
     }
   }, [price]);
 
