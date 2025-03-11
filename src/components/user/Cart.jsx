@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getCartItems, resetStatus } from "../../features/userSlice";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import CartItems from "./CartItems";
@@ -48,7 +48,12 @@ const Cart = () => {
           </div>
           <p className="mt-6">
             There is nothing in your bag.
-            <span className="text-beige-700"> Let's add some items.</span>
+            <Link
+              className="ms-2 text-beige-700 duration-500 ease-in-out hover:rounded-md hover:bg-beige-500/80 hover:p-3 hover:text-white hover:underline"
+              to="/wishlist"
+            >
+              Let's add some items.
+            </Link>
           </p>
         </div>
       </div>
