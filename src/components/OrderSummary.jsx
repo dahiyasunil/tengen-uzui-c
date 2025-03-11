@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { clearCartThunk, placeOrder, resetStatus } from "../features/userSlice";
+import { fetchProducts } from "../features/productSlice";
 
 const OrderSummary = () => {
   const location = useLocation();
@@ -12,22 +13,17 @@ const OrderSummary = () => {
     user: { orders },
   } = useSelector((state) => state.user);
   const deliveryAddress = location.state;
-  console.log(status);
-  console.log(orders);
 
   useEffect(() => {
     dispatch(placeOrder(deliveryAddress));
   }, []);
 
-  useEffect(() => {
-    if (status === "orderPlacedSuccessfully") {
-      setTimeout(() => {
-        dispatch(clearCartThunk());
-        navigate("/user/orders");
-        dispatch(resetStatus());
-      }, 3000);
-    }
-  }, [status]);
+  const continueShoppingHandler = () => {
+    dispatch(clearCartThunk());
+    dispatch(fetchProducts());
+    navigate("/products");
+    dispatch(resetStatus());
+  };
 
   return (
     <div className="container grid h-72 content-center justify-items-center">
@@ -39,9 +35,18 @@ const OrderSummary = () => {
         </p>
       )}
       {status === "orderPlacedSuccessfully" && (
-        <p className="text-2xl font-medium text-emerald-500">
-          Order placed Successfully!
-        </p>
+        <div className="text-center">
+          <p className="text-2xl font-medium text-emerald-500">
+            Order placed Successfully!
+          </p>
+          <button
+            onClick={continueShoppingHandler}
+            href="#"
+            className="mt-8 inline-block rounded-md border border-transparent bg-beige-500 px-8 py-3 text-center font-medium text-white hover:bg-beige-700"
+          >
+            Continue Shopping
+          </button>
+        </div>
       )}
       {status === "failedToplaceOrder" && (
         <p className="text-2xl font-medium text-red-500">

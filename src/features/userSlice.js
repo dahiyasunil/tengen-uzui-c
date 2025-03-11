@@ -527,6 +527,7 @@ const userSlice = createSlice({
     });
     builder.addCase(placeOrder.fulfilled, (state, action) => {
       state.status = "orderPlacedSuccessfully";
+      state.user.bag = [];
       state.user.orders = action.payload.orders;
     });
     builder.addCase(placeOrder.rejected, (state, action) => {

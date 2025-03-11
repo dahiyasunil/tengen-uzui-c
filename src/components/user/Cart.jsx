@@ -101,7 +101,7 @@ const Cart = () => {
               <span className="text-white">
                 {location.pathname === "/cart/address"
                   ? "PLACE ORDER"
-                  : "CONTINE"}
+                  : "CONTINUE"}
               </span>
             </button>
           </section>
